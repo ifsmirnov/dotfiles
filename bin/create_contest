@@ -1,0 +1,43 @@
+#!/bin/bash
+
+if [[ $# == 0 || $1 == "help" ]]; then
+    echo "Usage:"
+    echo "help:         display this message"
+    echo "<a..z> [dir]: create the contests with tasks a-{specified_letter}"
+    echo "              in the directory [dir]"
+    echo "prob <name>:  create testlib.h-based skeleton for making a problem"
+    exit 0
+fi
+
+if [[ $# > 1 ]]; then
+    name=$2
+else
+    name=`date +%F`
+fi
+
+if [[ $1 == "prob" ]]; then
+    if [[ $# -le 1 ]]; then
+        echo 2>&1 "Please specify problem name"
+        exit 1
+    fi
+    mkdir -p $name || exit 1
+    cd $name
+    cp ~/olymp/problem_stem/*.cpp .
+    mv NAME.cpp ${name}_is.cpp
+    touch input.txt
+else
+    if [[ "$THREAD" == 1 ]]; then
+        TEMPLATE_PATH=~/olymp/thread_template.cpp
+    else
+        TEMPLATE_PATH=~/olymp/template.cpp
+    fi
+
+    mkdir -p $name || exit 1
+    cd $name
+    for i in `eval "echo {a..$1}"`; do
+        mkdir $i
+#         cp ~/olymp/template.cpp $i/$i.cpp
+        sed "s/input.txt/$i.in/" $TEMPLATE_PATH > $i/$i.cpp
+        touch $i/$i.in
+    done
+fi

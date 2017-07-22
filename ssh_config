@@ -1,0 +1,11 @@
+Host *
+ControlMaster auto
+ControlPath ~/.ssh/sockets/%r@%h-%p
+ControlPersist 30
+
+ForwardAgent yes
+ForwardX11 yes
+StrictHostKeyChecking no
+
+# ssh version 7.3p1 or higher required
+Include config.d/*

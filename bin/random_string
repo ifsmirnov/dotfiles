@@ -1,0 +1,7 @@
+#!/usr/bin/python
+
+from random import choice
+
+alph = 'qwertyuiopasdfghjklzxcvbnm'
+
+print ''.join(choice(alph) for i in range(5))

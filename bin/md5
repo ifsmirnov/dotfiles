@@ -1,0 +1,43 @@
+#!/bin/bash
+
+function merge {
+    echo "$@" | md5sum | sed "s/^\([^ ]*\) .*$/\1/g"
+}
+
+function hash {
+    merge "$1" $(md5sum "$1" | sed "s/^\([^ ]*\) .*$/\1/g")
+}
+
+if [ -n "$1" ]; then
+    if [ -d "$1" ]; then
+        cd $1 2>/dev/null || exit
+    elif [ -a "$1" ]; then
+        echo $(hash "$1") "$1"
+        exit
+    fi
+fi
+
+function dir_hash {
+    cur=$(merge)
+    for file in .* *; do
+        if [ "$file" == ".." -o "$file" == "." ]; then
+            continue
+        fi
+        if [ "$file" == ".idea" ]; then
+            continue
+        fi
+        if [ -d "$file" ]; then
+            if cd "$file" 2>/dev/null ; then
+                cur=$(merge "$cur" "$file" $(dir_hash))
+                cd .. || exit
+            fi
+        else
+            cur=$(merge "$cur" $(hash "$file"))
+        fi
+    done
+    echo $cur
+}
+
+shopt -s nullglob
+echo $(dir_hash) $(basename $(pwd))
+shopt -u nullglob

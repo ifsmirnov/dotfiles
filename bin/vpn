@@ -1,0 +1,13 @@
+#!/bin/bash
+
+function status {
+    ps aux | grep openvpn | grep -v grep >/dev/null && echo "VPN is up" || echo "VPN is down"
+}
+
+case "${1:-}" in
+    start|up) (sudo openvpn --config /etc/openvpn/openvpn.conf) ;;
+    stop|down) (sudo killall -q openvpn); sleep 0.1 ;;
+    -h|--help|help) echo "Usage: vpn [ up/start | down/stop ]" ;;
+esac
+
+status

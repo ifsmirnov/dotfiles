@@ -1,0 +1,13 @@
+# Modify prompt when in pkg-root environment
+if [ -n "$PKG_ROOT" ] ; then
+    export PS1='\[\033[32;1m\][env] \[\033[0m\]'$PS1
+fi
+
+# Quickly enter pkg-root environment
+alias senv="~/work/pkg-root/set_environment.sh"
+
+alias gr="gradle --parallel --max-workers 4 --daemon"
+
+# export EMAIL="ifsmirnov@yandex-team.ru"
+# export DEBEMAIL="ifsmirnov@yandex-team.ru"
+export CCACHE="ccache"

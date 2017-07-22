@@ -1,0 +1,6 @@
+--type-set=mk=mk,Makefile
+--type-set=idl=idl
+--ignore-dir=genfiles
+--ignore-dir=build
+--ignore-dir=.polygon-cli
+--type-set=gradle=gradle

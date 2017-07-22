@@ -1,0 +1,2 @@
+#!/bin/bash
+ls /usr/share/cowsay/cows/ | sort -R | head -n 1 | xargs -I place cowsay -f place $1

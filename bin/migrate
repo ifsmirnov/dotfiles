@@ -1,0 +1,19 @@
+#!/bin/bash
+
+machine=$1
+if [[ -z "$2" ]]; then
+    login="ifsmirnov"
+else
+    login=$2
+fi
+echo copying configs to $login@$machine...
+scp -r \
+    ~/.bashrc \
+    ~/.bashrc_local \
+    ~/.vimrc \
+    ~/.vim \
+    ~/.inputrc \
+    ~/.gitconfig \
+    ~/.gitignore_global \
+    ~/.profile \
+    $login@$machine:~

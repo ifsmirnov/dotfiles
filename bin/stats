@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+
+use warnings;
+use strict;
+
+my %commiters;
+# format: { name => \[commits, +, -] }
+
+my $log_command = 'git log --format="%H %ae" --numstat .';
+
+my @endings = ("cpp", "c", "h", "hpp", "mk", "py", "idl", "java", "mm");
+
+my $last_author;
+for my $line (split "\n", qx/$log_command/) {
+    next unless $line;
+    if ($line =~ /[a-f0-9]{40} (.+)@(.+)/) {
+        my $id = $1;
+        $last_author = $id;
+
+        if (defined $commiters{$id}) {
+            ${$commiters{$id}}[0] += 1
+        } else {
+            $commiters{$id} = [1, 0, 0];
+        }
+    } else {
+        $line =~ /(\d+)\s+(\d)+\s+(\S.*)/ or next;
+        my $ok = 0;
+        for (@endings) {
+            if ($3 =~ /.$_$/) {
+                $ok = 1;
+                last;
+            }
+        }
+        next unless $ok;
+        ${$commiters{$last_author}}[1] += int $1;
+        ${$commiters{$last_author}}[2] += int $2;
+    }
+}
+
+sub cmp_commits {
+    return ${$commiters{$b}}[0] - ${$commiters{$a}}[0];
+}
+
+sub cmp_add {
+    return ${$commiters{$b}}[1] - ${$commiters{$a}}[1];
+}
+
+my @ordered_names = sort cmp_add keys %commiters;
+
+for (@ordered_names) {
+    my @a = @{$commiters{$_}};
+    print "$_: $a[0] commits, +$a[1], -$a[2]\n"
+}
+

@@ -1,0 +1,15 @@
+[user]
+    name = Ivan Smirnov
+    email = ifsmirnov@yandex.ru
+[alias]
+    l = log --graph --color --decorate=short
+    df = diff --color
+    s = status -s
+    b = branch
+[core]
+    editor = vim 
+    excludesfile = /home/ifsmirnov/dotfiles/gitignore_global
+[diff]
+    algorithm = patience
+[push]
+    default = upstream
