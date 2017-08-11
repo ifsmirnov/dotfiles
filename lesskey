@@ -1,0 +1,8 @@
+n		forw-line
+N		forw-line-force
+e		back-line
+E		back-line-force
+l		repeat-search
+L		reverse-search
+		forw-line 4n
+		back-line 4e
