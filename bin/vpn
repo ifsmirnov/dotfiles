@@ -5,9 +5,17 @@ function status {
 }
 
 case "${1:-}" in
-    start|up) (sudo openvpn --config /etc/openvpn/openvpn.conf) ;;
-    stop|down) (sudo killall -q openvpn); sleep 0.1 ;;
-    -h|--help|help) echo "Usage: vpn [ up/start | down/stop ]" ;;
+    start|up) 
+        sudo openvpn --config /etc/openvpn/openvpn.conf
+        sudo systemd-tty-ask-password-agent
+        ;;
+    stop|down)
+        sudo killall -q openvpn
+        sleep 0.1
+        ;;
+    -h|--help|help)
+        echo "Usage: vpn [ up/start | down/stop ]"
+        ;;
 esac
 
 status

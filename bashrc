@@ -11,6 +11,14 @@ export ANDROID_HOME="/home/ifsmirnov/dev/android-sdk-linux"
 export JAVA_HOME="/usr/lib/jvm/java-8-oracle"
 export ANDROID_NDK="/home/ifsmirnov/dev/android-ndk-r13b"
 
+export DEBFULLNAME="Ivan Smirnov"
+export EMAIL="ifsmirnov@yandex.ru"
+export DEBEMAIL="ifsmirnov@yandex.ru"
+export QT_HOME="/home/ifsmirnov/.Qt5.9.1/5.3/gcc_64"
+export ANDROID_HOME="/home/ifsmirnov/dev/android-sdk-linux"
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+export ANDROID_NDK="/home/ifsmirnov/sdk/android-ndk-r13b"
+
 # ACM shortcuts
 alias gd="g++ -std=c++11 -ggdb -DLOCAL";
 alias gp="g++ -std=c++11 -pg -DLOCAL";

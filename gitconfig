@@ -6,6 +6,7 @@
     df = diff --color
     s = status -s
     b = branch
+    co = checkout
 [core]
     editor = vim 
     excludesfile = /home/ifsmirnov/dotfiles/gitignore_global

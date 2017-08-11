@@ -5,6 +5,7 @@ func! FunctionForMultilineComment438971049723904()
 TOC_01 Vundle stuff
 TOC_02 Variables
 TOC_03 Global settings
+TOC_03 Global settings
 TOC_04 File-local settings
 TOC_05 Plugin settings
 TOC_06 Colors
@@ -51,7 +52,7 @@ let $CXXFLAGS .= "-I/home/ifsmirnov/olymp "
 let $CFLAGS = "-O2 -std=c89 -pedantic -Wall -Werror -Wextra"
 
 let g:colemak = 1
-let g:python = 3
+let g:python = 2
 
 
 " ============================  Global settings  =====================TOC_03
@@ -87,6 +88,9 @@ set listchars=tab:>-
 set nrformats-=octal
 " no new tab after namespace
 set cinoptions+=N-s
+set incsearch
+set ignorecase
+set smartcase
 
 
 " ==========================  File-local settings  ===================TOC_04
@@ -111,7 +115,7 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
 
 let g:NERDTreeMapOpenExpl = "j" " thnx Colemak
 
-let g:ctrlp_custom_ignore='build'
+let g:ctrlp_custom_ignore='/build/'
 
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
@@ -121,6 +125,7 @@ let g:ycm_complete_in_strings = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_goto_buffer_command = 'horizontal-split'
 
 let g:NERDSpaceDelims = 1
 let g:NERDCommentEmptyLines = 1
@@ -128,6 +133,8 @@ let g:NERDDefaultAlign = 'left'
 let g:NERDTrimTrailingWhitespace = 1
 
 let g:searchindex_next_key = g:colemak ? 'l' : 'n'
+
+let g:ctrlp_working_path_mode = 'a'
 
 
 " ================================  Colors  ==========================TOC_06
@@ -159,6 +166,9 @@ nnoremap Q <nop>
 map gc <plug>NERDCommenterComment
 map gu <plug>NERDCommenterUncomment
 
+map gd :YcmCompleter GoTo<Enter>
+map gD :YcmCompleter GetType<Enter>
+
 " Fold the function body staying in its first line
 map gz HV/{<Enter>%zf:let @/=""<Enter>
 
@@ -174,20 +184,40 @@ map <Leader>n :NERDTreeToggle<Enter>
 map <Leader>u :UndotreeToggle<Enter>:UndotreeFocus<Enter>
 
 map <C-T> :tabe<Enter>
-map <C-I> :vnew<Enter>
+
+imap {<CR> {<CR>}<Esc>O
+
+map ; :
 
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
     write
     if &filetype == "cpp" || &filetype == "c"
-        make! %:r
+        let CXXFLAGS = $CXXFLAGS
+        call system("grep '#include \"jngen.h\"' " . shellescape(expand("%")))
+        if !v:shell_error 
+            echom "Success"
+            let $CXXFLAGS .= "-DJNGEN_DECLARE_ONLY "
+            let $CXXFLAGS .= "/home/ifsmirnov/olymp/jngen/lib.o "
+        endif
+
+        silent !echo
+        silent !echo -e "\033[31;1m* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\033[0;m"
+        silent make! %:r
+        if len(getqflist()) > 1
+            :!
+        endif
+        redraw!
+
+        let $CXXFLAGS = CXXFLAGS
     elseif &filetype == "java"
         !javac %
     elseif &filetype == "tex"
         !pdflatex %
     else
-        echo "Cannot compile file of type " . &filetype
+        echom "Cannot compile file of type " . &filetype
     endif
+    " redraw!
 endf
 
 func! Run()
@@ -234,11 +264,11 @@ imap с с
 
 " ==================================  Git  ===========================TOC_10
 " TODO: replace these mappings with fugitive
-map gA :!git add %<Enter>
-map gB :!tig blame %<Enter>
-map gC :!git commit<Enter>
-map gD :!git df %<Enter>
-map gS :!git s<Enter>
+" map gA :!git add %<Enter>
+" map gB :!tig blame %<Enter>
+" map gC :!git commit<Enter>
+" map gD :!git df %<Enter>
+" map gS :!git s<Enter>
 
 func! DiffWithHead()
     echo expand('%')
@@ -256,6 +286,7 @@ if g:colemak
     noremap n j
     noremap e k
     noremap i zvl
+    onoremap i l
     noremap l n
     noremap k i
     noremap j e
@@ -265,6 +296,9 @@ if g:colemak
     noremap L N
     noremap K I
     noremap J E
+
+    noremap gn gj
+    noremap ge gk
 
     map H ^
 

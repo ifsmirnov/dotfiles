@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DOTFILES="ackrc inputrc vimrc gitconfig"
+DOTFILES="ackrc inputrc vimrc gitconfig lesskey"
 DIR=`pwd`
 
 echo Making symlinks for regular dotfiles
@@ -46,5 +46,8 @@ mkdir -p ~/.ssh/sockets
 echo Creating vim special directories
 mkdir -p ~/.vim/.undo
 mkdir -p ~/.vim/.swp
+ln -sf $DIR/vim-snippets ~/.vim/mysnippets
+
+echo Running lesskey
 
 echo Done
