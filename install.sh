@@ -1,7 +1,10 @@
 #!/bin/sh
 
-DOTFILES="ackrc inputrc vimrc gitconfig lesskey"
+DOTFILES="ackrc inputrc vimrc gitconfig lesskey zshrc"
 DIR=`pwd`
+
+echo Installing oh-my-zsh
+sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
 
 echo Making symlinks for regular dotfiles
 for file in $DOTFILES; do
@@ -9,17 +12,19 @@ for file in $DOTFILES; do
     ln -sf $DIR/$file ~/.$file
 done
 
-echo -n "Patching .bashrc... "
-if grep -q 'dotfiles/bashrc' ~/.bashrc; then
-    echo "patch already exists"
-else
-    cat >> ~/.bashrc << EOF
-if [ -f ~/dotfiles/bashrc ]; then
-    . ~/dotfiles/bashrc
-fi
-EOF
-    echo "done"
-fi
+# Not needed after I migrated to zsh
+#
+# echo -n "Patching .bashrc... "
+# if grep -q 'dotfiles/bashrc' ~/.bashrc; then
+#     echo "patch already exists"
+# else
+#     cat >> ~/.bashrc << EOF
+# if [ -f ~/dotfiles/bashrc ]; then
+#     . ~/dotfiles/bashrc
+# fi
+# EOF
+#     echo "done"
+# fi
 
 echo "Making symlinks for ~/bin executables"
 mkdir -p ~/bin
@@ -33,6 +38,8 @@ for exe in *; do
 done
 cd ..
 
+# Openssh of version at least 7.3p1 is needed 
+# due to 'include' directive in config
 echo Creating .ssh directory and copying config
 if ! test -d ~/.ssh; then
     echo Create ~/.ssh directory
@@ -49,5 +56,14 @@ mkdir -p ~/.vim/.swp
 ln -sf $DIR/vim-snippets ~/.vim/mysnippets
 
 echo Running lesskey
+lesskey
 
-echo Done
+echo "Done!"
+echo
+
+cat <<EOF
+Do not forget!
+    - install latest vim
+    - install vim plugins
+    - build ycm
+EOF
