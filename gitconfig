@@ -8,12 +8,16 @@
     b = branch
     co = checkout
     ci = commit
+    cia = commit --amend
     re = rebase
+    cp = cherry-pick
     pure = pull --rebase
 [core]
-    editor = vim 
     excludesfile = /home/ifsmirnov/dotfiles/gitignore_global
+	editor = vim
 [diff]
     algorithm = patience
 [push]
     default = upstream
+[pager]
+    stash = false

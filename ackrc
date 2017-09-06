@@ -4,3 +4,4 @@
 --ignore-dir=build
 --ignore-dir=.polygon-cli
 --type-set=gradle=gradle
+--smart-case

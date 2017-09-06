@@ -5,6 +5,7 @@ ControlPersist 30
 
 ForwardAgent yes
 ForwardX11 yes
+ForwardX11Trusted yes
 StrictHostKeyChecking no
 
 # ssh version 7.3p1 or higher required

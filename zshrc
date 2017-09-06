@@ -12,9 +12,10 @@ export QT_HOME="/home/ifsmirnov/.Qt5.9.1/5.3/gcc_64"
 export ANDROID_HOME="/home/ifsmirnov/sdk/android"
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 export ANDROID_NDK="/home/ifsmirnov/sdk/android-ndk-r13b"
-export CCACHE=ccache
+export CCACHE='grc -e ccache'
 
 export EDITOR=vim
+alias tmux='tmux -2'
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -156,3 +157,4 @@ export HISTSIZE=100000000
 export SAVEHIST=100000000
 
 alias dcj=/home/ifsmirnov/olymp/dist_codejam17/tester/dcj.sh
+stty -ixon

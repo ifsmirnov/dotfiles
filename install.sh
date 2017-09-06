@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DOTFILES="ackrc inputrc vimrc gitconfig lesskey zshrc"
+DOTFILES="ackrc inputrc vimrc gitconfig lesskey zshrc tmux.conf"
 DIR=`pwd`
 
 echo Installing oh-my-zsh
@@ -64,6 +64,8 @@ echo
 cat <<EOF
 Do not forget!
     - install latest vim
+    - install vundle
     - install vim plugins
     - build ycm
+    - (optional) install latest ssh client
 EOF

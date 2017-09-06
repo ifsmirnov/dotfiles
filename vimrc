@@ -5,7 +5,6 @@ func! FunctionForMultilineComment438971049723904()
 TOC_01 Vundle stuff
 TOC_02 Variables
 TOC_03 Global settings
-TOC_03 Global settings
 TOC_04 File-local settings
 TOC_05 Plugin settings
 TOC_06 Colors
@@ -19,6 +18,7 @@ TOC_12 Miscellaneous
 endf
 
 " =============================  Vundle stuff  =======================TOC_01
+
 set nocompatible
 filetype off
 
@@ -28,6 +28,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'Valloric/YouCompleteMe'
+" todo: oblitum/YouCompleteMe
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'SirVer/ultisnips'
@@ -68,6 +69,7 @@ set showcmd
 set whichwrap+=h,l
 set matchpairs+=<:>
 set mouse=a
+set ttymouse=xterm2
 set complete-=i
 set hlsearch
 set ruler
@@ -91,7 +93,16 @@ set cinoptions+=N-s
 set incsearch
 set ignorecase
 set smartcase
+au FileType * setlocal formatoptions-=r formatoptions-=o
 
+func! ColemakOrQwerty()
+    call system("~/bin/is_colemak")
+    if v:shell_error
+        return "Qwerti"
+    else
+        return "Colemak"
+    fi
+endf
 
 " ==========================  File-local settings  ===================TOC_04
 autocmd BufEnter *.html set shiftwidth=2
@@ -136,16 +147,17 @@ let g:searchindex_next_key = g:colemak ? 'l' : 'n'
 
 let g:ctrlp_working_path_mode = 'a'
 
-
 " ================================  Colors  ==========================TOC_06
+set t_Co=256
+colorscheme elflord
 highlight DiffAdd    cterm=none ctermfg=10 ctermbg=4 gui=none guifg=bg guibg=Red
 highlight DiffDelete cterm=none ctermfg=10 ctermbg=4 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=none ctermfg=10 ctermbg=4 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=none ctermfg=10 ctermbg=1 gui=none guifg=bg guibg=Red
-set t_Co=256
 
-colorscheme elflord
 
+
+highlight ColorColumn ctermbg=237
 
 " ===============================  Mappings  =========================TOC_07
 let mapleader=","
@@ -183,11 +195,14 @@ map <Leader>r :source ~/.vimrc<Enter>
 map <Leader>n :NERDTreeToggle<Enter>
 map <Leader>u :UndotreeToggle<Enter>:UndotreeFocus<Enter>
 
+map <Leader>/ :nohlsearch<Enter>
+
 map <C-T> :tabe<Enter>
 
 imap {<CR> {<CR>}<Esc>O
 
 map ; :
+map q; q:
 
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
