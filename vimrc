@@ -39,6 +39,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'luochen1990/rainbow'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ifsmirnov/vim-searchindex'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+" Plugin 'lyokha/vim-xkbswitch'
 
 call vundle#end()
 filetype plugin indent on
@@ -93,7 +96,11 @@ set cinoptions+=N-s
 set incsearch
 set ignorecase
 set smartcase
+set conceallevel=1
+set shortmess+=c
+set langremap
 au FileType * setlocal formatoptions-=r formatoptions-=o
+au FileType markdown setlocal formatoptions+=r formatoptions+=o
 
 func! ColemakOrQwerty()
     call system("~/bin/is_colemak")
@@ -103,6 +110,7 @@ func! ColemakOrQwerty()
         return "Colemak"
     fi
 endf
+
 
 " ==========================  File-local settings  ===================TOC_04
 autocmd BufEnter *.html set shiftwidth=2
@@ -147,6 +155,14 @@ let g:searchindex_next_key = g:colemak ? 'l' : 'n'
 
 let g:ctrlp_working_path_mode = 'a'
 
+let g:vim_markdown_folding_disabled = 1
+let g:vim_markdown_math = 1
+
+" let g:XkbSwitchEnabled = 1
+" let g:XkbSwitchLib = '/usr/local/lib/libxkbswitch.so'
+" let g:XkbSwitchIMappings = ['ru']
+
+
 " ================================  Colors  ==========================TOC_06
 set t_Co=256
 colorscheme elflord
@@ -155,9 +171,8 @@ highlight DiffDelete cterm=none ctermfg=10 ctermbg=4 gui=none guifg=bg guibg=Red
 highlight DiffChange cterm=none ctermfg=10 ctermbg=4 gui=none guifg=bg guibg=Red
 highlight DiffText   cterm=none ctermfg=10 ctermbg=1 gui=none guifg=bg guibg=Red
 
-
-
 highlight ColorColumn ctermbg=237
+
 
 " ===============================  Mappings  =========================TOC_07
 let mapleader=","
@@ -203,6 +218,7 @@ imap {<CR> {<CR>}<Esc>O
 
 map ; :
 map q; q:
+
 
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
@@ -267,13 +283,31 @@ endf
 
 
 " ===========================  Russian language  =====================TOC_09
-imap оо <Esc>
-inoremap соо соо
-map Д $
-map Р ^
-cmap ц w
-imap А А
-imap с с
+" func! SetRussianLangmap()
+"     let x1  = "йцукенгшщзхъфывапролджэячсмитьбю"
+"     let y1  = "qwfpgjluy;[]arstdhneio'zxcvbkm,."
+"     let x2  = "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ"
+"     let y2  = "QWFPGJLUY:{}ARSTDHNEIO\\\"ZXCVBKM<>"
+"     " More escaping for the god of escaping
+"     " '\\\\' stands for literal '\', '\\0' stands for backref
+"     let x1  = substitute(x1, ",\\|;", "\\\\\\\\\\0", "g")
+"     let y1  = substitute(y1, ",\\|;", "\\\\\\\\\\0", "g")
+"     let x2  = substitute(x2, ",\\|;", "\\\\\\\\\\0", "g")
+"     let y2  = substitute(y2, ",\\|;", "\\\\\\\\\\0", "g")
+"     let map = x1 . ";" . y1 . "," . x2 . ";" . y2
+"     echo map
+"     " let map = x1 . ";" . y1
+"     exec "set langmap=" . map
+" endf
+"
+" call SetRussianLangmap()
+" imap оо <Esc>
+" inoremap соо соо
+" map Д $
+" map Р ^
+" cmap ц w
+" imap А А
+" imap с с
 " langmap ru-en(colemak) to be added soon
 
 

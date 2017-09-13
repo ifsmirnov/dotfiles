@@ -16,6 +16,7 @@ export CCACHE='grc -e ccache'
 
 export EDITOR=vim
 alias tmux='tmux -2'
+alias vim='TERM=xterm-color vim'
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -101,6 +102,10 @@ autoload -U compinit && compinit
 
 if [ -n "$PKG_ROOT" ]; then
     PROMPT='%{$fg_bold[green]%}[env]%{$reset_color%} '$PROMPT
+fi
+
+if [ `whoami` = 'root' ]; then
+    PROMPT='%{$fg_bold[red]%}#%{$reset_color%} '$PROMPT
 fi
 
 alias senv=~/work/pkg-root/set_environment.sh

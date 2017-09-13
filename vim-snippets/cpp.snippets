@@ -1,0 +1,195 @@
+snippet ACM_modular "Modular arithmetics" b
+const int mod = ${1:1e9+7};
+
+int add() { return 0; }
+int add(int x) { return x; }
+template<typename... Args> int add(int x, Args... args) {
+    x += add(args...);
+    if (x >= mod) x -= mod;
+    return x;
+}
+template<typename... Args> void udd(int &x, Args... args) {
+    x = add(x, args...);
+}
+
+int mul() { return 1; }
+int mul(int x) { return x; }
+template<typename... Args> int mul(int x, Args... args) {
+    return 1ll * x * mul(args...) % mod;
+}
+template<typename... Args> void uul(int &x, Args... args) {
+    x = mul(x, args...);
+}
+
+int mpow(int x, int k) {
+    int a = 1;
+    while (true) {
+        if (k&1) a = mul(a, x);
+        k /= 2;
+        if (k == 0) break;
+        x = mul(x, x);
+    }
+    return a;
+}
+
+int inv(int x) {
+    return mpow(x, mod - 2);
+}
+$0
+endsnippet
+snippet template_jngen "Generator template with jngen" b
+#include <bits/stdc++.h>
+#include "jngen.h"
+using namespace std;
+#define forn(i, n) for (int i = 0; i < int(n); ++i)
+
+int main(int argc, char *argv[]) {
+    // registerGen(argc, argv);
+    parseArgs(argc, argv);
+
+	$0
+}
+endsnippet
+snippet template_basic "Basic template" b
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	$0
+}
+endsnippet
+snippet prn "Debug print" b
+std::cerr << "$1: " << ${1} << "\n";
+$0
+endsnippet
+snippet ACM_multitest "multitest" b
+int t;
+cin >> t;
+// scanf("%d", &t);
+for (int III = 0; III < t; ++III) {
+	scan();
+	solve();
+}
+$0
+endsnippet
+snippet ACM_maxlf "unordered_set.max_load_factor" b
+${1}.max_load_factor(0.25);
+$1.reserve(${2:1000000});
+$0
+endsnippet
+snippet unique "unique" b
+${1}.erase(unique($1.begin(), $1.end()), $1.end());
+$0
+endsnippet
+snippet ACM_stdhash "std::hash for type" b
+namespace std {
+template<>
+struct hash<${1}> {
+	size_t operator()(const $1& ${2:x}) const {
+		$0
+	}
+};
+}
+endsnippet
+snippet memset "memset" b
+memset(${1}, 0, sizeof($1));
+$0
+endsnippet
+snippet ACM_fenwick "Fenwick" b
+${1:int} fen[maxn];
+void fadd(int i, $1 x) {
+	for (; i < maxn; i |= (i+1))
+		fen[i] += x;
+}
+$1 fget(int i) {
+	$1 s = 0;
+	for (; i >= 0; i = (i&(i+1))-1)
+		s += fen[i];
+	return s;
+}
+$0
+endsnippet
+snippet ACM_lca "LCA" b
+int lca(int u, int v) {
+	if (anc(v, u)) return v;
+	ford(k, 20) {
+		if (!anc(p[v][k], u)) {
+			v = p[v][k];
+		}
+	}
+	return p[v][0];
+}
+$0
+endsnippet
+snippet ACM_anc "is ancestor" b
+bool anc(int u, int v) {
+	return tin[u] <= tin[v] && tout[v] <= tout[u];
+}
+$0
+endsnippet
+snippet ACM_gcd "gcd" b
+${1:int} gcd($1 a, $1 b) {
+	while (b) {
+		a %= b;
+		swap(a, b);
+	}
+	return a;
+}
+$0
+endsnippet
+snippet ACM_factors
+${1:vi} factors(${2:int} n) {
+	$1 res;
+	for ($2 i = 1; i*i <= n; ++i) {
+		if (n%i == 0) {
+			res.push_back(i);
+			if (i != n/i) {
+				res.push_back(n/i);
+			}
+		}
+	}
+	sort(res.begin(), res.end());
+	return res;
+}
+$0
+endsnippet
+snippet ACM_erath
+void erath() {
+	pr[0] = pr[1] = false;
+	for (int i = 2; i < ${1:maxn}; ++i) if (!${2:pr}[i]) {
+		if ((i64)i*i > $1) break;
+		for (int j = i*i; j < $1; j += i) $2[j] = true;
+	}
+}
+$0
+endsnippet
+snippet ACM_priority_queue "description"
+priority_queue<${1:pii}, vector<$1>, greater<$1>> $0
+endsnippet
+snippet rmq "Useless piece of shit, I just tested some features" b
+struct ${1:node} {
+	int l, r;
+	node *L, *R;
+	${2:int val;}
+
+	node(int l, int r${3}) : l(l), r(r) {
+		${4:val = 0;}
+		if (l + 1 == r) {
+			L = R = NULL;${5}
+		} else {
+			int m = (l + r) / 2;
+			L = new node(l, m${6:`!p
+import re
+res = ""
+for i in t[3].split(','):
+    match = re.match(".*\W(\w+)\s*", i)
+    if match:
+        res += ", " + match.groups()[0]
+snip.rv = res
+`});
+			R = new node(m, r${7:$6});${8}
+		}
+	}
+};
+$0
+endsnippet
