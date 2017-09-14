@@ -4,36 +4,36 @@ const int mod = ${1:1e9+7};
 int add() { return 0; }
 int add(int x) { return x; }
 template<typename... Args> int add(int x, Args... args) {
-    x += add(args...);
-    if (x >= mod) x -= mod;
-    return x;
+	x += add(args...);
+	if (x >= mod) x -= mod;
+	return x;
 }
 template<typename... Args> void udd(int &x, Args... args) {
-    x = add(x, args...);
+	x = add(x, args...);
 }
 
 int mul() { return 1; }
 int mul(int x) { return x; }
 template<typename... Args> int mul(int x, Args... args) {
-    return 1ll * x * mul(args...) % mod;
+	return 1ll * x * mul(args...) % mod;
 }
 template<typename... Args> void uul(int &x, Args... args) {
-    x = mul(x, args...);
+	x = mul(x, args...);
 }
 
 int mpow(int x, int k) {
-    int a = 1;
-    while (true) {
-        if (k&1) a = mul(a, x);
-        k /= 2;
-        if (k == 0) break;
-        x = mul(x, x);
-    }
-    return a;
+	int a = 1;
+	while (true) {
+		if (k&1) a = mul(a, x);
+		k /= 2;
+		if (k == 0) break;
+		x = mul(x, x);
+	}
+	return a;
 }
 
 int inv(int x) {
-    return mpow(x, mod - 2);
+	return mpow(x, mod - 2);
 }
 $0
 endsnippet
@@ -44,8 +44,8 @@ using namespace std;
 #define forn(i, n) for (int i = 0; i < int(n); ++i)
 
 int main(int argc, char *argv[]) {
-    // registerGen(argc, argv);
-    parseArgs(argc, argv);
+	// registerGen(argc, argv);
+	parseArgs(argc, argv);
 
 	$0
 }
