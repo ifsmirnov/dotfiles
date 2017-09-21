@@ -16,7 +16,7 @@ export CCACHE='grc -e ccache'
 
 export EDITOR=vim
 alias tmux='tmux -2'
-alias vim='TERM=xterm-color vim'
+alias vim='TERM=xterm vim'
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
