@@ -36,12 +36,16 @@ Plugin 'honza/vim-snippets'
 Plugin 'mbbill/undotree'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-repeat'
 Plugin 'luochen1990/rainbow'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ifsmirnov/vim-searchindex'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
+Plugin 'metakirby5/codi.vim'
 " Plugin 'lyokha/vim-xkbswitch'
+" Plugin 'artur-shaik/vim-javacomplete2'
 
 call vundle#end()
 filetype plugin indent on
@@ -49,7 +53,7 @@ filetype plugin indent on
 
 " ===============================  Variables  ========================TOC_02
 let $IFSMIRNOV=1
-let $CXXFLAGS = "-O2 -std=c++11 -Wall -Wextra -DLOCAL "
+let $CXXFLAGS = "-O2 -std=c++14 -Wall -Wextra -DLOCAL "
 let $CXXFLAGS .= "-Wno-char-subscripts -Wno-unused-result "
 let $CXXFLAGS .= "-I/home/ifsmirnov/olymp "
 
@@ -73,6 +77,7 @@ set whichwrap+=h,l
 set matchpairs+=<:>
 set mouse=a
 set ttymouse=xterm2
+" set term=xterm
 set complete-=i
 set hlsearch
 set ruler
@@ -119,6 +124,8 @@ autocmd BufEnter *.html set softtabstop=2
 autocmd BufEnter Makefile set noet
 autocmd BufLeave Makefile set et
 
+autocmd BufEnter *.json setlocal conceallevel=0
+
 au BufRead,BufNewFile *.in setfiletype text
 au BufRead,BufNewFile *.gradle setfiletype groovy
 au BufEnter,BufRead,BufNewFile *.md setfiletype markdown
@@ -133,6 +140,7 @@ let g:UltiSnipsSnippetsDir="~/.vim/mysnippets"
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
 
 let g:NERDTreeMapOpenExpl = "j" " thnx Colemak
+au VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
 
 let g:ctrlp_custom_ignore='/build/'
 
@@ -145,6 +153,8 @@ let g:ycm_complete_in_comments = 1
 let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_goto_buffer_command = 'horizontal-split'
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+" let g:ycm_auto_trigger = 0
 
 let g:NERDSpaceDelims = 1
 let g:NERDCommentEmptyLines = 1
@@ -161,6 +171,13 @@ let g:vim_markdown_math = 1
 " let g:XkbSwitchEnabled = 1
 " let g:XkbSwitchLib = '/usr/local/lib/libxkbswitch.so'
 " let g:XkbSwitchIMappings = ['ru']
+
+" autocmd FileType java setlocal omnifunc=javacomplete#Complete
+
+" let g:codi#log = '/tmp/codi_log'
+" let g:codi#rightalign = 0
+let g:codi#width = 80
+let g:codi#rightsplit = 0
 
 
 " ================================  Colors  ==========================TOC_06
@@ -195,6 +212,7 @@ map gu <plug>NERDCommenterUncomment
 
 map gd :YcmCompleter GoTo<Enter>
 map gD :YcmCompleter GetType<Enter>
+map ,f :YcmCompleter FixIt<Enter>:cclose<Enter>
 
 " Fold the function body staying in its first line
 map gz HV/{<Enter>%zf:let @/=""<Enter>
@@ -218,6 +236,9 @@ imap {<CR> {<CR>}<Esc>O
 
 map ; :
 map q; q:
+
+" Do not reset indent when typing #
+inoremap # X#
 
 
 " =========================  Compile/Run functions  ==================TOC_08
@@ -348,6 +369,7 @@ if g:colemak
 
     noremap gn gj
     noremap ge gk
+    noremap gl gn
 
     map H ^
 

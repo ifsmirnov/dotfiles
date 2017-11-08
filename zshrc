@@ -13,6 +13,8 @@ export ANDROID_HOME="/home/ifsmirnov/sdk/android"
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
 export ANDROID_NDK="/home/ifsmirnov/sdk/android-ndk-r13b"
 export CCACHE='grc -e ccache'
+export USE_CCACHE=1
+export NDK_CCACHE='grc -e ccache'
 
 export EDITOR=vim
 alias tmux='tmux -2'
@@ -108,16 +110,16 @@ if [ `whoami` = 'root' ]; then
     PROMPT='%{$fg_bold[red]%}#%{$reset_color%} '$PROMPT
 fi
 
-alias senv=~/work/pkg-root/set_environment.sh
+alias senv=~/work/pkg-root/mysenv.sh
 
 alias clean_env="dpkg -l | grep bundle | grep -v deve | cut -f3 -d' ' | xargs apt-get remove --assume-yes && apt-get autoremove --assume-yes"
 
 unsetopt share_history
 
 # ACM shortcuts
-alias gd="g++ -std=c++11 -ggdb -DLOCAL";
-alias gp="g++ -std=c++11 -pg -DLOCAL";
-alias g="g++ -O2 -std=c++11 -Wall -Wextra -DLOCAL -Wno-char-subscripts -Wno-unused-result -I/home/ifsmirnov/olymp"
+alias gd="g++ -std=c++14 -ggdb -DLOCAL";
+alias gp="g++ -std=c++14 -pg -DLOCAL";
+alias g="g++ -O2 -std=c++14 -Wall -Wextra -DLOCAL -Wno-char-subscripts -Wno-unused-result -I/home/ifsmirnov/olymp"
 alias pc=polygon-cli
 
 # Go to the last used directory

@@ -1,3 +1,106 @@
+snippet ACM_dijkstra "Dijkstra" b
+void dijkstra() {
+	using WP = pair<i64, int>;
+	int S = 0;
+
+	forn(i, n) d[i] = inf, b[i] = 0;
+	priority_queue<WP, vector<WP>, greater<WP>> q;
+	d[S] = 0;
+	q.emplace(d[S], S);
+
+	while (!q.empty()) {
+		int v = q.top().second;
+		q.pop();
+
+		if (b[v]) continue;
+		b[v] = 1;
+
+		for (auto kv: e[v]) {
+			int to, w;
+			tie(to, w) = kv;
+			if (d[to] > d[v] + w) {
+				d[to] = d[v] + w;
+				anc[to] = v;
+				q.emplace(d[to], to);
+			}
+		}
+	}
+}
+$0
+endsnippet
+snippet ACM_readgraphw "Read weighted graph" b
+cin >> n >> m;
+forn(i, m) {
+	cin >> n >> m;
+	forn(i, m) {
+		int u, v;
+		int w;
+		cin >> u >> v >> w;
+		--u, --v;
+		e[u].emplace_back(v, w);
+		e[v].emplace_back(u, w);
+	}
+}
+$0
+endsnippet
+snippet ACM_readgraph "Read graph" b
+cin >> n >> m;
+forn(i, m) {
+	int u, v;
+	cin >> u >> v;
+	--u, --v;
+	e[u].emplace_back(v);
+	e[v].emplace_back(u);
+}
+$0
+endsnippet
+snippet ns "Namespase" b
+namespace ${1}{
+
+$0
+
+} // namespace`!p
+snip.rv = " " + t[1].strip() if t[1] else ""
+`
+endsnippet
+snippet ACM_cnk "C_n^k" b
+int cnk[${1:maxn}][$1];
+void fillCnk() {
+	forn(n, $1) {
+		cnk[n][0] = cnk[n][n] = 1;
+		for (int k = 1; k < n; ++k) {
+			cnk[n][k] = add(cnk[n-1][k-1], cnk[n-1][k]);
+		}
+	}
+}
+$0
+endsnippet
+snippet ACM_yesno "Yes/no output template" b
+void yes() {
+	cout << "${1:YES}\n";
+	exit(0);
+}
+
+void no() {
+	cout << "${2:NO}\n";
+	exit(0);
+}
+$0
+endsnippet
+snippet ACM_isprime "is prime" b
+bool isPrime(${1:int} n) {
+	for ($1 i = 2; i*i <= n; ++i) {
+		if (n%i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+$0
+endsnippet
+snippet glib "_GLIBCXX_DEBUG" b
+#define _GLIBCXX_DEBUG$0
+endsnippet
 snippet ACM_modular "Modular arithmetics" b
 const int mod = ${1:1e9+7};
 
@@ -169,10 +272,10 @@ endsnippet
 snippet rmq "Useless piece of shit, I just tested some features" b
 struct ${1:node} {
 	int l, r;
-	node *L, *R;
+	$1 *L, *R;
 	${2:int val;}
 
-	node(int l, int r${3}) : l(l), r(r) {
+	$1(int l, int r${3}) : l(l), r(r) {
 		${4:val = 0;}
 		if (l + 1 == r) {
 			L = R = NULL;${5}
