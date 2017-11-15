@@ -1,0 +1,166 @@
+snippet ACM_flatset "Flat set" b
+struct FlatSet {
+	vector<int> a;
+
+	FlatSet() {}
+	FlatSet(vector<int> a) : a(std::move(a)) {}
+
+	void add(int x) {
+		a.push_back(x);
+	}
+
+	void build() {
+		sort(all(a));
+		a.erase(unique(a.begin(), a.end()), a.end());
+	}
+
+	int operator[](int x) const {
+		auto it = lower_bound(all(a), x);
+		assert(it != a.end() && *it == x);
+		return it - a.begin();
+	}
+
+	int val(size_t index) const {
+		assert(index < a.size());
+		return a[index];
+	}
+
+	int rlower(int x) const {
+		auto it = lower_bound(all(a), x);
+		assert(it != a.end());
+		return it - a.begin();
+	}
+
+	int rupper(int x) const {
+		auto it = upper_bound(all(a), x);
+		assert(it != a.end());
+		return it - a.begin();
+	}
+
+	int llower(int x) const {
+		auto it = upper_bound(all(a), x);
+		assert(it != a.begin());
+		return it - a.begin() - 1;
+	}
+
+	int lupper(int x) const {
+		auto it = lower_bound(all(a), x);
+		assert(it != a.begin());
+		return it - a.begin() - 1;
+	}
+};
+endsnippet
+snippet ACM_dinic "Dinic" b
+namespace dinic {
+
+const int maxn = 100100;
+struct Edge {
+	int to;
+	i64 c, f;
+	Edge(int to, i64 c): to(to), c(c), f(0) {}
+};
+
+vector<Edge> es;
+vector<int> e[maxn];
+int q[maxn], d[maxn], pos[maxn];
+int n, S, T;
+
+bool bfs() {
+	fill(d, d + n, maxn);
+	d[S] = 0, q[0] = S;
+	int rq = 1;
+	forn(lq, rq) {
+		int v = q[lq];
+		for (int id: e[v]) {
+			if (es[id].c == es[id].f) continue;
+			int to = es[id].to;
+			if (d[to] == maxn) {
+				d[to] = d[v] + 1;
+				q[rq++] = to;
+			}
+		}
+	}
+	return d[T] != maxn;
+}
+
+i64 dfs(int v, i64 curf) {
+	if (v == T) return curf;
+	i64 ret = 0;
+	for (int &i = pos[v]; i < (int)e[v].size(); ++i) {
+		int id = e[v][i];
+		int to = es[id].to;
+		i64 delta = min(curf, es[id].c - es[id].f);
+		if (delta == 0 || d[to] != d[v] + 1) {
+			continue;
+		}
+		delta = dfs(to, delta);
+		curf -= delta;
+		ret += delta;
+		es[id].f += delta;
+		es[id ^ 1].f -= delta;
+		if (curf == 0) return ret;
+	}
+	return ret;
+}
+
+void addEdge(int u, int v, i64 c) {
+	n = max(n, max(u, v) + 1);
+	e[u].push_back(es.size());
+	es.emplace_back(v, c);
+	e[v].push_back(es.size());
+	es.emplace_back(u, 0);
+}
+
+i64 runDinic(int S_, int T_) {
+	S = S_;
+	T = T_;
+	i64 res = 0;
+	while (bfs()) {
+		fill(pos, pos + n, 0);
+		while (i64 cur = dfs(S, 1e18)) {
+			res += cur;
+		}
+	}
+	return res;
+}
+
+void clear() {
+	forn(i, n) e[i].clear();
+	es.clear();
+}
+
+} // namespace dinic
+
+using dinic::addEdge;
+using dinic::runDinic;
+endsnippet
+snippet ACM_dijkstra "Dijkstra" b
+void dijkstra() {
+	using WP = pair<i64, int>;
+	int S = 0;
+
+	forn(i, n) d[i] = inf, b[i] = 0;
+	priority_queue<WP, vector<WP>, greater<WP>> q;
+	d[S] = 0;
+	q.emplace(d[S], S);
+
+	while (!q.empty()) {
+		int v = q.top().second;
+		q.pop();
+
+		if (b[v]) continue;
+		b[v] = 1;
+
+		for (auto kv: e[v]) {
+			int to, w;
+			tie(to, w) = kv;
+			if (d[to] > d[v] + w) {
+				d[to] = d[v] + w;
+				anc[to] = v;
+				q.emplace(d[to], to);
+			}
+		}
+	}
+}
+$0
+endsnippet

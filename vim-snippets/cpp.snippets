@@ -1,31 +1,43 @@
-snippet ACM_dijkstra "Dijkstra" b
-void dijkstra() {
-	using WP = pair<i64, int>;
-	int S = 0;
-
-	forn(i, n) d[i] = inf, b[i] = 0;
-	priority_queue<WP, vector<WP>, greater<WP>> q;
-	d[S] = 0;
-	q.emplace(d[S], S);
-
-	while (!q.empty()) {
-		int v = q.top().second;
-		q.pop();
-
-		if (b[v]) continue;
-		b[v] = 1;
-
-		for (auto kv: e[v]) {
-			int to, w;
-			tie(to, w) = kv;
-			if (d[to] > d[v] + w) {
-				d[to] = d[v] + w;
-				anc[to] = v;
-				q.emplace(d[to], to);
-			}
-		}
+snippet ACM_gcdex "gcdex" b
+${1:int} gcdex($1 a, $1 b, $1 &x, $1 &y) {
+	if (a == 0) {
+		x = 0, y = 1;
+		return b;
 	}
+	$1 x1, y1;
+	$1 g = gcdex(b % a, a, x1, y1);
+	x = y1 - x1 * (b / a);
+	y = x1;
+	assert(a * x + b * y == g);
+	return g;
 }
+$0
+endsnippet
+snippet ACM_oset "Ordered set" b
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+typedef __gnu_pbds::tree<int, __gnu_pbds::null_type,
+		std::less<int>,
+		__gnu_pbds::rb_tree_tag,
+		__gnu_pbds::tree_order_statistics_node_update> oset;
+endsnippet
+snippet ACM_for2 "for cur prev" b
+#define for2(cur, prev, a) for (auto _it1 = std::begin(a),\
+		_it2 = _it1 == std::end(a) ? _it1 : std::next(_it1);\
+		_it2 != std::end(a); ++_it1, ++_it2)\
+		for (bool _ = true; _;)\
+		for (auto &x = *_it1, &y = *_it2; _; _ = false)
+endsnippet
+snippet loud_struct "Loud structure" b
+struct ${1:C} {
+	$1() { std::cerr << "$1()\n"; }
+	$1(const $1&) { std::cerr << "$1(const $1&)\n"; }
+	$1& operator=(const $1&) { std::cerr << "$1 = const $1&\n"; return *this; }
+	$1($1&&) { std::cerr << "$1($1&&)\n"; }
+	$1& operator=($1&&) { std::cerr << "$1 = $1&&\n"; return *this; }
+	~$1() { std::cerr << "~$1()\n"; }
+};
 $0
 endsnippet
 snippet ACM_readgraphw "Read weighted graph" b
@@ -41,7 +53,6 @@ forn(i, m) {
 		e[v].emplace_back(u, w);
 	}
 }
-$0
 endsnippet
 snippet ACM_readgraph "Read graph" b
 cin >> n >> m;
@@ -52,7 +63,6 @@ forn(i, m) {
 	e[u].emplace_back(v);
 	e[v].emplace_back(u);
 }
-$0
 endsnippet
 snippet ns "Namespase" b
 namespace ${1}{
