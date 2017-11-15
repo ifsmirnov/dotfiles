@@ -53,7 +53,7 @@ filetype plugin indent on
 
 " ===============================  Variables  ========================TOC_02
 let $IFSMIRNOV=1
-let $CXXFLAGS = "-O2 -std=c++14 -Wall -Wextra -DLOCAL "
+let $CXXFLAGS = "-O2 -std=c++17 -Wall -Wextra -DLOCAL "
 let $CXXFLAGS .= "-Wno-char-subscripts -Wno-unused-result "
 let $CXXFLAGS .= "-I/home/ifsmirnov/olymp "
 
@@ -235,11 +235,17 @@ map <C-T> :tabe<Enter>
 imap {<CR> {<CR>}<Esc>O
 
 map ; :
-map q; q:
+nnoremap q; q:i
 
 " Do not reset indent when typing #
 inoremap # X#
 
+func! MacroInVisualMode()
+    let t = nr2char(getchar())
+    return "q" . t . "gv"
+endf
+
+vmap <expr> q MacroInVisualMode()
 
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
@@ -380,6 +386,8 @@ if g:colemak
     nnoremap <C-W>E <C-W>K
     nnoremap <C-W>I <C-W>L
 
+    " todo: @='5n'
+    " (http://vim.wikia.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_2))
     map <C-N> 5n
     map <C-E> 5e
     inoremap kk <Esc>
