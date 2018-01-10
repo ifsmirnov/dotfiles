@@ -210,8 +210,8 @@ nnoremap Q <nop>
 map gc <plug>NERDCommenterComment
 map gu <plug>NERDCommenterUncomment
 
-map gd :YcmCompleter GoTo<Enter>
-map gD :YcmCompleter GetType<Enter>
+map gd :YcmCompleter GoToImprecise<Enter>
+map gD :YcmCompleter GetTypeImprecise<Enter>
 map ,f :YcmCompleter FixIt<Enter>:cclose<Enter>
 
 " Fold the function body staying in its first line

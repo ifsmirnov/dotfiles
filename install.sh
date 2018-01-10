@@ -40,7 +40,7 @@ cd ..
 
 # Openssh of version at least 7.3p1 is needed 
 # due to 'include' directive in config
-echo Creating .ssh directory and copying config
+echo Creating .ssh directory and copying config and sshrc
 if ! test -d ~/.ssh; then
     echo Create ~/.ssh directory
     mkdir ~/.ssh
@@ -48,6 +48,7 @@ if ! test -d ~/.ssh; then
 fi
 mkdir -p ~/.ssh/config.d
 ln -sf $DIR/ssh_config ~/.ssh/config
+ln -sf $DIR/sshrc ~/.ssh/rc
 mkdir -p ~/.ssh/sockets
 
 echo Creating vim special directories
