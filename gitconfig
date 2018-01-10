@@ -6,6 +6,7 @@
     df = diff --color
     s = status -s
     b = branch
+    br = branch
     co = checkout
     ci = commit
     cia = commit --amend

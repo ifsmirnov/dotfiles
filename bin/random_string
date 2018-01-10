@@ -2,6 +2,7 @@
 
 from random import choice
 
-alph = 'qwertyuiopasdfghjklzxcvbnm'
+#  alph = 'qwertyuiopasdfghjklzxcvbnm'
+alph = '0123456789abcdef'
 
-print ''.join(choice(alph) for i in range(5))
+print ''.join(choice(alph) for i in range(8))

@@ -117,9 +117,9 @@ alias clean_env="dpkg -l | grep bundle | grep -v deve | cut -f3 -d' ' | xargs ap
 unsetopt share_history
 
 # ACM shortcuts
-alias gd="g++ -std=c++14 -ggdb -DLOCAL";
-alias gp="g++ -std=c++14 -pg -DLOCAL";
-alias g="g++ -O2 -std=c++14 -Wall -Wextra -DLOCAL -Wno-char-subscripts -Wno-unused-result -I/home/ifsmirnov/olymp"
+alias gd="g++ -std=c++17 -ggdb -DLOCAL";
+alias gp="g++ -std=c++17 -pg -DLOCAL";
+alias g="g++ -O2 -std=c++17 -Wall -Wextra -DLOCAL -Wno-char-subscripts -Wno-unused-result -I/home/ifsmirnov/olymp"
 alias pc=polygon-cli
 
 # Go to the last used directory

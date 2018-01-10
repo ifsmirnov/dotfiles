@@ -46,6 +46,7 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'metakirby5/codi.vim'
 " Plugin 'lyokha/vim-xkbswitch'
 " Plugin 'artur-shaik/vim-javacomplete2'
+Plugin 'johngrib/vim-game-code-break'
 
 call vundle#end()
 filetype plugin indent on
@@ -236,6 +237,8 @@ imap {<CR> {<CR>}<Esc>O
 
 map ; :
 nnoremap q; q:i
+
+" todo: escape control keys in two next mappings
 
 " Do not reset indent when typing #
 inoremap # X#

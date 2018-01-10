@@ -1,3 +1,15 @@
+snippet ctor5 "3 constructors" b
+${1}() = default;
+$1(const $1&) = default;
+$1& operator=(const $1&) = default;
+$1($1&&) = default;
+$1& operator=($1&&) = default;
+endsnippet
+snippet ctor3 "3 constructors" b
+${1}() = default;
+$1(const $1&) = default;
+$1& operator=(const $1&) = default;
+endsnippet
 snippet ACM_gcdex "gcdex" b
 ${1:int} gcdex($1 a, $1 b, $1 &x, $1 &y) {
 	if (a == 0) {
@@ -27,7 +39,7 @@ snippet ACM_for2 "for cur prev" b
 		_it2 = _it1 == std::end(a) ? _it1 : std::next(_it1);\
 		_it2 != std::end(a); ++_it1, ++_it2)\
 		for (bool _ = true; _;)\
-		for (auto &x = *_it1, &y = *_it2; _; _ = false)
+		for (auto &cur = *_it1, &prev = *_it2; _; _ = false)
 endsnippet
 snippet loud_struct "Loud structure" b
 struct ${1:C} {
@@ -43,15 +55,12 @@ endsnippet
 snippet ACM_readgraphw "Read weighted graph" b
 cin >> n >> m;
 forn(i, m) {
-	cin >> n >> m;
-	forn(i, m) {
-		int u, v;
-		int w;
-		cin >> u >> v >> w;
-		--u, --v;
-		e[u].emplace_back(v, w);
-		e[v].emplace_back(u, w);
-	}
+	int u, v;
+	int w;
+	cin >> u >> v >> w;
+	--u, --v;
+	e[u].emplace_back(v, w);
+	e[v].emplace_back(u, w);
 }
 endsnippet
 snippet ACM_readgraph "Read graph" b
