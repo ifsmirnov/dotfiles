@@ -500,3 +500,12 @@ let g:rainbow_conf = {
     \        'css': 0,
     \    }
     \}
+
+" workaround for https://github.com/vim/vim/issues/1start671 -- entering
+" bracketed paste mode after exiting vim
+if has("unix")
+  let s:uname = system("echo -n \"$(uname)\"")
+  if !v:shell_error && s:uname == "Linux"
+    set t_BE=
+  endif
+endif
