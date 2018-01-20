@@ -1,3 +1,16 @@
+snippet ACM_prefixfunction "Prefix function" b
+vector<int> pi(string s) {
+	vector<int> p(s.size());
+	forn(i, s.size()) if (i) {
+		p[i] = p[i-1];
+		while (p[i] && s[i] != s[p[i]]) {
+			p[i] = p[p[i]-1];
+		}
+		if (s[i] == s[p[i]]) ++p[i];
+	}
+	return p;
+}
+endsnippet
 snippet ACM_flatset "Flat set" b
 struct FlatSet {
 	vector<int> a;

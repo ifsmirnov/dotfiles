@@ -1,3 +1,20 @@
+snippet ACM_bitsetcount "Count in bitset range" b
+int count(int l, int r) {
+	int s = 0;
+	const unsigned long long* c = reinterpret_cast<const unsigned long long*>(&a);
+	if (l/64 == r/64) {
+		return __builtin_popcountll((c[l/64] & ((1ll << (r%64)) - 1)) >> l%64);
+	}
+	s += __builtin_popcountll(c[l/64] >> (l % 64));
+	for (int i = l/64 + 1; i < r/64; ++i) {
+		s += __builtin_popcountll(c[i]);
+	}
+	if (r%64 != 0) {
+		s += __builtin_popcountll((c[r/64] << (64 - r % 64)));
+	}
+	return s;
+}
+endsnippet
 snippet ctor5 "3 constructors" b
 ${1}() = default;
 $1(const $1&) = default;
@@ -73,7 +90,7 @@ forn(i, m) {
 	e[v].emplace_back(u);
 }
 endsnippet
-snippet ns "Namespase" b
+snippet ns "Namespace" b
 namespace ${1}{
 
 $0
@@ -228,6 +245,19 @@ $1 fget(int i) {
 	for (; i >= 0; i = (i&(i+1))-1)
 		s += fen[i];
 	return s;
+}
+// min i: fget(i) >= x
+int frev($1 x) {
+	int res = 0;
+	$1 s = 0;
+	for (int step = 1<<19; step >= 1; step /= 2) {
+		int i = res + step - 1;
+		if (i < maxn && s + fen[i] < x) {
+			s += fen[i];
+			res += step;
+		}
+	}
+	return res;
 }
 $0
 endsnippet

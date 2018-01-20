@@ -56,6 +56,7 @@ filetype plugin indent on
 let $IFSMIRNOV=1
 let $CXXFLAGS = "-O2 -std=c++17 -Wall -Wextra -DLOCAL "
 let $CXXFLAGS .= "-Wno-char-subscripts -Wno-unused-result "
+let $CXXFLAGS .= "-Wno-misleading-indentation "
 let $CXXFLAGS .= "-I/home/ifsmirnov/olymp "
 
 let $CFLAGS = "-O2 -std=c89 -pedantic -Wall -Werror -Wextra"
