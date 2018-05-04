@@ -42,6 +42,27 @@ ${1:int} gcdex($1 a, $1 b, $1 &x, $1 &y) {
 }
 $0
 endsnippet
+snippet ACM_crt "Chinese remainer theorem" b
+${1:int} crt($1 x1, $1 mod1, $1 x2, $1 mod2) {
+	$1 r = (x2 - (x1 % mod2) + mod2) % mod2;
+	$1 x, y;
+	$1 g = gcdex(mod1, mod2, x, y);
+	assert(r % g == 0);
+
+	x %= mod2;
+	if (x < 0) {
+		x += mod2;
+	}
+
+	$1 ans = (x * (r / g)) % mod2;
+	ans = ans * mod1 + x1;
+	ans %= mod1 / g * mod2;
+
+	assert(ans % mod1 == x1);
+	assert(ans % mod2 == x2);
+	return ans;
+}
+endsnippet
 snippet ACM_oset "Ordered set" b
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>

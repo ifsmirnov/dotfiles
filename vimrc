@@ -58,6 +58,7 @@ let $CXXFLAGS = "-O2 -std=c++17 -Wall -Wextra -DLOCAL "
 let $CXXFLAGS .= "-Wno-char-subscripts -Wno-unused-result "
 let $CXXFLAGS .= "-Wno-misleading-indentation "
 let $CXXFLAGS .= "-I/home/ifsmirnov/olymp "
+let $CXXFLAGS .= "-pthread "
 
 let $CFLAGS = "-O2 -std=c89 -pedantic -Wall -Werror -Wextra"
 
@@ -192,6 +193,11 @@ highlight DiffText   cterm=none ctermfg=10 ctermbg=1 gui=none guifg=bg guibg=Red
 
 highlight ColorColumn ctermbg=237
 
+highlight YcmWarningSection ctermfg=0 ctermbg=11 guifg=Blue guibg=Yellow
+" highlight YcmErrorSection cterm=none ctermbg=112 guifg=Blue guibg=Yellow
+
+" todo: :help :syn-sync
+
 
 " ===============================  Mappings  =========================TOC_07
 let mapleader=","
@@ -275,7 +281,9 @@ func! Compile()
     elseif &filetype == "java"
         !javac %
     elseif &filetype == "tex"
-        !pdflatex %
+        !lualatex %
+    elseif &filetype == "make"
+        !make
     else
         echom "Cannot compile file of type " . &filetype
     endif

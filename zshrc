@@ -67,7 +67,24 @@ CASE_SENSITIVE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git command-not-found pip sudo ubuntu zsh-completions)
+# plugins=(git command-not-found pip sudo uuntu zsh-completions)
+plugins=(git pip sudo ubuntu zsh-completions)
+# plugins+=("zsh-syntax-highlighting")
+
+# use custom completion and print failure-msg
+autoload -Uz is-at-least
+if is-at-least 5.4; then
+    if [[ -x /usr/lib/command-not-found ]] ; then
+        if (( ! ${+functions[command_not_found_handler]} )) ; then
+            function command_not_found_handler {
+                [[ -x /usr/lib/command-not-found ]] || return 1
+                /usr/lib/command-not-found -- ${1+"$1"} && :
+            }
+        fi
+    fi
+else
+    plugins+=("command-not-found")
+fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -101,6 +118,9 @@ autoload -U compinit && compinit
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+autoload -U zmv
+alias mmv='noglob zmv -W'
 
 if [ -n "$PKG_ROOT" ]; then
     PROMPT='%{$fg_bold[green]%}[env]%{$reset_color%} '$PROMPT
@@ -141,7 +161,7 @@ function Yellow { echo -e "\033[33;3m$@\033[0;m" ; }
 function Blue { echo -e "\033[36;3m$@\033[0;m" ; }
 
 # Grep anything without removing non-matching lines
-function color { egrep --color=always "$|$1"; }
+function color { egrep --line-buffered --color=always "$|$1"; }
 
 # Wrapper for xargs
 function sargs { xargs -L1 sh -c "$@" _; }
@@ -165,3 +185,156 @@ export SAVEHIST=100000000
 
 alias dcj=/home/ifsmirnov/olymp/dist_codejam17/tester/dcj.sh
 stty -ixon
+
+function run() {
+    read -sk1 c
+    if [ `printf %x "'$c"` = "1b" ]; then
+        read -sk1 c
+        if [ `printf %x "'$c"` = "1b" ]; then
+            # Typed escape twice, exit
+            return
+        fi
+    fi
+    case $c in
+        l) LBUFFER+='ls '    ;;
+        g) LBUFFER+='git '   ;;
+        e) LBUFFER+='echo '  ;;
+        m) LBUFFER+='mkdir ' ;;
+        u)
+            t=$BUFFER
+            LBUFFER=`python ~/maxdepth.py "$t" l`
+            RBUFFER=`python ~/maxdepth.py "$t" r`
+        ;;
+        *) LBUFFER+='echo "no such mapping"' ;;
+    esac
+}
+
+zle -N run
+
+bindkey '\el' 'run'
+
+function maxdepth() {
+    t=$BUFFER
+    LBUFFER=`python ~/maxdepth.py "$t" l`
+    RBUFFER=`python ~/maxdepth.py "$t" r`
+}
+
+zle -N maxdepth
+
+bindkey '\ek' 'maxdepth'
+
+# function zle-line-pre-redraw() {
+#     # print $region_highlight
+#     # echo
+#     # region_highlight+=("10 20 bg=yellow")
+#     # region_highlight+=("15 25 bold")
+#     # echo $region_highlight
+# }
+#
+# zle -N zle-line-pre-redraw
+
+# function zle-line-finish() {
+#     echo 123
+# }
+#
+# zle -N zle-line-finish
+#
+# function zle-line-finish() {
+#     echo 456
+# }
+
+function mypre() {
+    if (( ${+SAVED_RPROMPT} )); then
+        RPROMPT="$SAVED_RPROMPT"
+    fi
+    EXECUTED=1
+    LAST_CMD_SEC=`date +%s`
+    LAST_CMD_MSEC=`date +%N`
+    LAST_CMD_MSEC=${LAST_CMD_MSEC:0:3}
+}
+
+function mypost() {
+    if [[ -n "$EXECUTED" ]]; then
+        sec=`date +%s`
+        msec=`date +%N`
+        msec=${msec:0:3}
+        msec_delta=$(( (sec-LAST_CMD_SEC)*1000+(msec-LAST_CMD_MSEC) ))
+        if [[ $msec_delta -gt 2000 ]]; then
+            SAVED_RPROMPT=$RPROMPT
+            last_command=$(echo $history[$((HISTCMD-1))] | cut -d' ' -f1)
+            RPROMPT="[$last_command: $((msec_delta/1000))s $((msec_delta%1000))ms] $RPROMPT"
+
+            # time_msg="$((msec_delta % 1000)) ms"; ((msec_delta /= 1000))
+            # if [[ $msec_delta -gt 0 ]]; then
+                # time_msg=$((msec_delta % 60))
+
+            # msec_d=$((msec_delta % 1000)); ((msec_delta /= 1000))
+            if [[ $msec_delta -gt 10000 ]]; then
+                msg "'$history[$((HISTCMD-1))]' finished in $((msec_delta/1000)) s"
+            fi
+        else
+            RPROMPT="$SAVED_RPROMPT"
+        fi
+    else
+        RPROMPT="$SAVED_RPROMPT"
+    fi
+    EXECUTED=
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec mypre
+add-zsh-hook precmd mypost
+
+# PREV_NAME=${widgets[zle-line-finish]}
+
+# zle -N zle-line-finish f1
+# zle -A f1 f4
+# zle -N zle-line-finish f2
+
+# zle -N save-zle-line-finish ${PREV_NAME#*:}
+# function helper() {
+#     zle save-zle-line-finish
+#     # echo helper
+# }
+# zle -N zle-line-finish helper
+
+function append_widget() {
+    widget="$1"
+    name="$2"
+    [[ -n "$widget" ]] || { echo Empty widget; return 1 }
+    [[ -n "$name" ]] || { echo Empty name; return 1 }
+    prev_name="${widgets[$widget]}"
+    if [[ -n "$prev_name" ]]; then
+        PREFIX="r${RANDOM}_s${SECONDS}"
+        prev_name="${prev_name#*:}"
+        echo "replacing '$prev_name'"
+        zle -N orig_${PREFIX}_${prev_name} $prev_name
+        eval "
+        function helper_${PREFIX}_${prev_name}() {
+            zle orig_${PREFIX}_${prev_name} $prev_name
+            $name
+        }
+        "
+        zle -N $widget helper_${PREFIX}_${prev_name}
+    else
+        zle -N $widget $name
+        echo "creating new"
+    fi
+}
+
+function example() {
+    tmp="$LBUFFER"
+    LBUFFER="$RBUFFER"
+    RBUFFER="$tmp"
+    PREDISPLAY='[hel]\n'
+}
+
+# эта строчка регистрирует функцию как виджет
+zle -N example
+
+bindkey '^E' 'example'
+bindkey '\ep' up-line-or-beginning-search
+
+function connect() {
+    cat <(echo 'team6\ndcbduipllt') - | nc universum.dl24 2000$1
+}
