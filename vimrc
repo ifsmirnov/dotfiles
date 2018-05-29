@@ -28,6 +28,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 " todo: oblitum/YouCompleteMe
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
@@ -100,13 +101,14 @@ set listchars=tab:>-
 " <C-A> works on 07
 set nrformats-=octal
 " no new tab after namespace
-set cinoptions+=N-s
+set cinoptions+=N-sl1
 set incsearch
 set ignorecase
 set smartcase
 set conceallevel=1
 set shortmess+=c
 set langremap
+set encoding=utf-8
 au FileType * setlocal formatoptions-=r formatoptions-=o
 au FileType markdown setlocal formatoptions+=r formatoptions+=o
 
@@ -221,6 +223,8 @@ map gu <plug>NERDCommenterUncomment
 map gd :YcmCompleter GoToImprecise<Enter>
 map gD :YcmCompleter GetTypeImprecise<Enter>
 map ,f :YcmCompleter FixIt<Enter>:cclose<Enter>
+
+autocmd FileType python map <buffer> gd :YcmCompleter GoTo<Enter>
 
 " Fold the function body staying in its first line
 map gz HV/{<Enter>%zf:let @/=""<Enter>
