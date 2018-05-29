@@ -8,5 +8,5 @@ ForwardX11 yes
 ForwardX11Trusted yes
 StrictHostKeyChecking no
 
-# ssh version 7.3p1 or higher required
-Include config.d/*
+Match exec "~/dotfiles/check_ssh_version.sh 7.3"
+    Include config.d/*
