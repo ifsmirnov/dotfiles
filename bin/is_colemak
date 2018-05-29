@@ -1,0 +1,37 @@
+#!/bin/bash
+
+
+CHANGE=~/.layout_changed
+QUERY=~/.layout_query
+
+ask () {
+    echo asking
+    ! ( setxkbmap -query | grep -q 'colemak' )
+}
+
+# if [ ! -e $CHANGE ]; then
+#     echo "force ask"
+#     ask
+#     ret=$?
+#     exit $ret
+# fi
+#
+# if ! [[ -e $QUERY ]] || [[ $CHANGE -nt $QUERY ]]; then
+#     echo clearing
+#     echo -n > $QUERY
+# fi
+
+# pid=`awk '/PPid/ { print $2 }' < /proc/$$/status`
+pid=123
+# val=`fgrep $pid $QUERY | cut -d' ' -f2`
+val=1
+# val=`awk "/$pid/ { print "'$2'" }" < $QUERY`
+if [[ -z "$val" ]]; then
+    echo caching for $pid
+    ask
+    ret=$?
+    echo $pid $ret >> $QUERY
+    [[ $ret == 1 ]]
+else
+    [[ $val == 1 ]]
+fi
