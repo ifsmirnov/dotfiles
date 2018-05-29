@@ -8,7 +8,7 @@ export PATH="/home/ifsmirnov/bin":$PATH
 ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="true"
 ENABLE_CORRECTION="true"
-COMPLETION_WAITING_DOTS="true"
+# COMPLETION_WAITING_DOTS="true"
 plugins=(git pip sudo ubuntu zsh-completions)
 # plugins+=("zsh-syntax-highlighting")
 
