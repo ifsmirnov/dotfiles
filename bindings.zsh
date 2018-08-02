@@ -1,3 +1,11 @@
+function _current_branch() {
+    git rev-parse --abbrev-ref HEAD 2>/dev/null
+}
+
+function _default_branch() {
+    git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's:origin/::'
+}
+
 # Most of this is experimental garbage, but still.
 function run() {
     read -sk1 c
@@ -13,14 +21,13 @@ function run() {
         g) LBUFFER+='git '   ;;
         e) LBUFFER+='echo '  ;;
         m) LBUFFER+='mkdir ' ;;
-        u)
-            t=$BUFFER
-            LBUFFER=`python ~/maxdepth.py "$t" l`
-            RBUFFER=`python ~/maxdepth.py "$t" r`
-        ;;
         # show current git branch
-        c) LBUFFER+=`git rev-parse --abbrev-ref HEAD 2>/dev/null` ;;
-        *) LBUFFER+='echo "no such mapping"' ;;
+        c) LBUFFER+=`_current_branch` ;;
+        # show main git branch
+        p) LBUFFER+=`_default_branch` ;;
+        # merge-base between current branch and master
+        b) LBUFFER+=$(git merge-base `_current_branch` `_default_branch` | head -c8) ;;
+        u) LBUFFER+='ifsmirnov' ;;
     esac
 }
 

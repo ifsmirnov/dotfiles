@@ -32,6 +32,9 @@ source $ZSH/oh-my-zsh.sh
 export HISTSIZE=100000000
 export SAVEHIST=100000000
 
+fpath=($fpath /usr/share/zsh/vendor-functions /usr/share/zsh/vendor-completions)
+fpath=($fpath $(find /usr/share/zsh/functions -mindepth 1 -type d -print0 | tr '\0' ' '))
+
 autoload -U compinit && compinit
 
 # User config
@@ -59,9 +62,10 @@ alias pc=polygon-cli
 # Go to the last used directory
 alias cdl="cd \"\`ls -c --group-directories-first | head -n 1\`\""
 
-alias fnd="find . -name"
+alias fnd="noglob find . -name"
 alias sl=""
 alias LS=""
+alias gi=git # frequent typo
 
 alias tmux='tmux -2'
 alias vim='TERM=xterm vim'
@@ -95,8 +99,36 @@ function color { egrep --line-buffered --color=always "$|$1"; }
 # Wrapper for xargs
 function sargs { xargs -L1 sh -c "$@" _; }
 
+# fzf and fd
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if which fd >/dev/null; then
+    export FZF_DEFAULT_COMMAND='fd --type f'
+    export FZF_ALT_C_COMMAND='fd --type d'
+    export FZF_CTRL_T_COMMAND='fd --type f'
+fi
+
+# Locales
+export LANG=en_US.UTF-8
+export LANGUAGE=en_US
+export LC_CTYPE=en_US.UTF-8
+export LC_NUMERIC=en_GB.UTF-8
+export LC_TIME=en_GB.UTF-8
+export LC_COLLATE="en_US.UTF-8"
+export LC_MONETARY=en_GB.UTF-8
+export LC_MESSAGES="en_US.UTF-8"
+export LC_PAPER=en_GB.UTF-8
+export LC_NAME=en_GB.UTF-8
+export LC_ADDRESS=en_GB.UTF-8
+export LC_TELEPHONE=en_GB.UTF-8
+export LC_MEASUREMENT=en_GB.UTF-8
+export LC_IDENTIFICATION=en_GB.UTF-8
+export LC_ALL=
+
+# Load extra sources
 . ~/dotfiles/bindings.zsh
 . ~/dotfiles/stopwatch.zsh
+. ~/dotfiles/yt.zsh
 [ -e ~/dotfiles/local.zsh ] && . ~/dotfiles/local.zsh
 
 true

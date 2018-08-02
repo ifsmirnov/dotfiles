@@ -21,7 +21,7 @@ function stopwatch_post() {
             last_command=$(echo $history[$((HISTCMD-1))] | cut -d' ' -f1)
             RPROMPT="[$last_command: $((msec_delta/1000))s $((msec_delta%1000))ms] $RPROMPT"
 
-            if [[ $msec_delta -gt 10000 ]]; then
+            if [[ $msec_delta -gt 10000 ]] && which notify-send >/dev/null; then
                 msg "'$history[$((HISTCMD-1))]' finished in $((msec_delta/1000)) s"
             fi
         else
