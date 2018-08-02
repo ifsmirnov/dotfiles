@@ -196,6 +196,7 @@ highlight DiffText   cterm=none ctermfg=10 ctermbg=1 gui=none guifg=bg guibg=Red
 highlight ColorColumn ctermbg=237
 
 highlight YcmWarningSection ctermfg=0 ctermbg=11 guifg=Blue guibg=Yellow
+highlight link texMath Statement
 " highlight YcmErrorSection cterm=none ctermbg=112 guifg=Blue guibg=Yellow
 
 " todo: :help :syn-sync
