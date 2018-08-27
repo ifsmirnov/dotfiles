@@ -1,3 +1,19 @@
+snippet ACM_dsu "DSU" b
+int p[maxn];
+void init(int n = maxn) {
+	forn(i, n) p[i] = i;
+}
+int get(int x) {
+	return p[x] == x ? x : (p[x] = get(p[x]));
+}
+bool unite(int x, int y) {
+	x = get(x); y = get(y);
+	if (x == y) return false;
+	p[x] = y;
+	return true;
+}
+$0
+endsnippet
 snippet ACM_prefixfunction "Prefix function" b
 vector<int> pi(string s) {
 	vector<int> p(s.size());
@@ -10,6 +26,7 @@ vector<int> pi(string s) {
 	}
 	return p;
 }
+$0
 endsnippet
 snippet ACM_flatset "Flat set" b
 struct FlatSet {
@@ -62,6 +79,7 @@ struct FlatSet {
 		return it - a.begin() - 1;
 	}
 };
+$0
 endsnippet
 snippet ACM_dinic "Dinic" b
 namespace dinic {
