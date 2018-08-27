@@ -262,6 +262,28 @@ endf
 
 vmap <expr> q MacroInVisualMode()
 
+func! MakeLastSearchStrict()
+    let ss=""
+    if @/ =~ '^\\<.*\\>$'
+        let ss=@/[2:-3]
+    else
+        let ss='\<' . @/ . '\>'
+    endif
+    return "/" . ss . "\<CR>"
+endf
+
+map <expr> <Leader>s MakeLastSearchStrict()
+
+func! MakeLastSearchFuzzy()
+    let ss=".*"
+    for s:item in split(@/, '\zs')
+        let ss .= s:item . ".*"
+    endfor
+    return "/" . ss . "\<CR>"
+endf
+
+map <expr> <Leader>S MakeLastSearchFuzzy()
+
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
     write
