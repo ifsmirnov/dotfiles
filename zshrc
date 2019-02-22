@@ -51,6 +51,7 @@ if [ `whoami` = 'root' ]; then
 fi
 
 unsetopt share_history
+disable r
 
 # Compilation shortcuts
 alias gd="g++ -std=c++17 -ggdb -DLOCAL";
