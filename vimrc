@@ -27,9 +27,9 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'rdnetto/YCM-Generator'
-" todo: oblitum/YouCompleteMe
+" Plugin 'Valloric/YouCompleteMe'
+" Plugin 'rdnetto/YCM-Generator'
+Plugin 'oblitum/YouCompleteMe', {'name': 'oblitum-ycm'}
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'SirVer/ultisnips'
@@ -48,9 +48,16 @@ Plugin 'metakirby5/codi.vim'
 " Plugin 'lyokha/vim-xkbswitch'
 " Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'johngrib/vim-game-code-break'
+" Plugin 'wellle/targets.vim'
+Plugin 'junegunn/fzf.vim'
+
+Plugin 'lyuts/vim-rtags'
+Plugin 'majutsushi/tagbar'
 
 call vundle#end()
 filetype plugin indent on
+
+set rtp+=~/.fzf
 
 
 " ===============================  Variables  ========================TOC_02
@@ -111,6 +118,9 @@ set langremap
 set encoding=utf-8
 au FileType * setlocal formatoptions-=r formatoptions-=o
 au FileType markdown setlocal formatoptions+=r formatoptions+=o
+let &tags.=",tags;"
+
+set guicursor=
 
 func! ColemakOrQwerty()
     call system("~/bin/is_colemak")
@@ -154,7 +164,7 @@ let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings = 1
-let g:ycm_complete_in_comments = 1
+let g:ycm_complete_in_comments = 0
 let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_goto_buffer_command = 'horizontal-split'
@@ -184,6 +194,14 @@ let g:vim_markdown_math = 1
 let g:codi#width = 80
 let g:codi#rightsplit = 0
 
+let g:targets_aiAI = 'akAK'
+
+let g:rtagsRcCmd = '/home/ifsmirnov/packages/rtags/bin/rc'
+
+let g:tagbar_width=70
+let g:tagbar_sort=0
+
+autocmd FileType tagbar map <C-N> 5n
 
 " ================================  Colors  ==========================TOC_06
 set t_Co=256
@@ -283,6 +301,12 @@ func! MakeLastSearchFuzzy()
 endf
 
 map <expr> <Leader>S MakeLastSearchFuzzy()
+
+vmap <Leader>m :w !md5sum \| head -c10<CR>
+
+map <Leader>m :BL<Enter>
+
+map <leader>tb :TagbarToggle<Enter>
 
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
