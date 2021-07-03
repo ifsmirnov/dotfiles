@@ -27,32 +27,36 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'ycm-core/YouCompleteMe'
+
 " Plugin 'rdnetto/YCM-Generator'
-Plugin 'oblitum/YouCompleteMe', {'name': 'oblitum-ycm'}
+" Plugin 'oblitum/YouCompleteMe', {'name': 'oblitum-ycm'}
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+
 Plugin 'mbbill/undotree'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-abolish'
 Plugin 'tpope/vim-repeat'
+
 Plugin 'luochen1990/rainbow'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ifsmirnov/vim-searchindex'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'metakirby5/codi.vim'
-" Plugin 'lyokha/vim-xkbswitch'
-" Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'johngrib/vim-game-code-break'
-" Plugin 'wellle/targets.vim'
 Plugin 'junegunn/fzf.vim'
-
 Plugin 'lyuts/vim-rtags'
 Plugin 'majutsushi/tagbar'
+
+" Plugin 'lyokha/vim-xkbswitch'
+" Plugin 'artur-shaik/vim-javacomplete2'
+" Plugin 'wellle/targets.vim'
+
 
 call vundle#end()
 filetype plugin indent on
@@ -103,6 +107,7 @@ set backspace=indent,eol,start
 set timeoutlen=700
 syntax on
 let g:c_space_errors = 1
+let g:python_space_error_highlight = 1
 set list
 set listchars=tab:>-
 " <C-A> works on 07
@@ -131,6 +136,8 @@ func! ColemakOrQwerty()
     fi
 endf
 
+
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 
 " ==========================  File-local settings  ===================TOC_04
 autocmd BufEnter *.html set shiftwidth=2

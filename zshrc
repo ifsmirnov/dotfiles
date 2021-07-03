@@ -9,7 +9,8 @@ ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="true"
 ENABLE_CORRECTION="true"
 # COMPLETION_WAITING_DOTS="true"
-plugins=(git pip sudo ubuntu zsh-completions)
+# plugins=(git pip sudo ubuntu zsh-completions)
+plugins=(git pip sudo ubuntu)
 # plugins+=("zsh-syntax-highlighting")
 
 # use custom command-not-found and print failure-msg
@@ -34,6 +35,7 @@ export SAVEHIST=100000000
 
 fpath=($fpath /usr/share/zsh/vendor-functions /usr/share/zsh/vendor-completions)
 fpath=($fpath $(find /usr/share/zsh/functions -mindepth 1 -type d -print0 | tr '\0' ' '))
+fpath+=~/.zfunc
 
 autoload -U compinit && compinit
 
@@ -131,5 +133,7 @@ export LC_ALL=
 . ~/dotfiles/stopwatch.zsh
 . ~/dotfiles/yt.zsh
 [ -e ~/dotfiles/local.zsh ] && . ~/dotfiles/local.zsh
+
+export PATH="/home/ifsmirnov/bin":$PATH
 
 true
