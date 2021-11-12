@@ -1,19 +1,16 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
+# Path to oh-my-zsh installation.
 export ZSH=/home/ifsmirnov/.oh-my-zsh
-export PATH="/home/ifsmirnov/bin":$PATH
 
 ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="true"
 ENABLE_CORRECTION="true"
 # COMPLETION_WAITING_DOTS="true"
-# plugins=(git pip sudo ubuntu zsh-completions)
 plugins=(git pip sudo ubuntu)
 # plugins+=("zsh-syntax-highlighting")
 
 # use custom command-not-found and print failure-msg
+# /me from 2021: up-to-date builtin command-not-found seems to work properly.
+# Maybe should remove.
 autoload -Uz is-at-least
 if is-at-least 5.4; then
     if [[ -x /usr/lib/command-not-found ]] ; then
@@ -53,6 +50,7 @@ if [ `whoami` = 'root' ]; then
 fi
 
 unsetopt share_history
+setopt inc_append_history
 disable r
 
 # Compilation shortcuts
@@ -86,6 +84,8 @@ bindkey '\ep' up-line-or-beginning-search
 autoload -U zmv
 alias mmv='noglob zmv -W'
 
+alias a=arc
+
 # Colorful messaging
 function red    { echo -e "\033[31;1m$@\033[0;m" ; }
 function green  { echo -e "\033[32;1m$@\033[0;m" ; }
@@ -103,13 +103,18 @@ function color { egrep --line-buffered --color=always "$|$1"; }
 function sargs { xargs -L1 sh -c "$@" _; }
 
 # fzf and fd
+# local installation?
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-if which fd >/dev/null; then
-    export FZF_DEFAULT_COMMAND='fd --type f'
-    export FZF_ALT_C_COMMAND='fd --type d'
-    export FZF_CTRL_T_COMMAND='fd --type f'
-fi
+# package installation?
+[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+
+# if which fd >/dev/null; then
+#     export FZF_DEFAULT_COMMAND='fd --type f'
+#     export FZF_ALT_C_COMMAND='fd --type d'
+#     export FZF_CTRL_T_COMMAND='fd --type f'
+# fi
 
 # Locales
 export LANG=en_US.UTF-8
@@ -131,9 +136,16 @@ export LC_ALL=
 # Load extra sources
 . ~/dotfiles/bindings.zsh
 . ~/dotfiles/stopwatch.zsh
-. ~/dotfiles/yt.zsh
+[ -e ~/dotfiles/yandex.zsh ] && . ~/dotfiles/yandex.zsh
+# May define HOST_SHORTNAME to be appended to prompt.
 [ -e ~/dotfiles/local.zsh ] && . ~/dotfiles/local.zsh
 
-export PATH="/home/ifsmirnov/bin":$PATH
+# Apply local stuff.
+if [ -n "$HOST_SHORTNAME" ]; then
+    PROMPT='%{$fg_bold[green]%}$HOST_SHORTNAME%{$reset_color%} '$PROMPT
+fi
+
+echo $PATH | tr ':' '\n' | grep -q "^$HOME/bin$" ||
+    export PATH="$HOME/bin":$PATH
 
 true

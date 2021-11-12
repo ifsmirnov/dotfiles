@@ -1,0 +1,5 @@
+fzf: sudo apt-get install fzf; see /usr/share/doc/fzf/README.Debian for how to install bindings.
+
+fd: sudo apt-get install fd-find; ln -s $(which fdfind) ~/bin/fd
+
+rg: sudo apt-get install ripgrep

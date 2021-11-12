@@ -17,7 +17,6 @@ function run() {
         fi
     fi
     case $c in
-        l) LBUFFER+='ls '    ;;
         g) LBUFFER+='git '   ;;
         e) LBUFFER+='echo '  ;;
         m) LBUFFER+='mkdir ' ;;
@@ -28,6 +27,11 @@ function run() {
         # merge-base between current branch and master
         b) LBUFFER+=$(git merge-base `_current_branch` `_default_branch` | head -c8) ;;
         u) LBUFFER+='ifsmirnov' ;;
+        *)
+            which _eval_yandex_esc_l_binding >/dev/null && {
+                _eval_yandex_esc_l_binding $c
+            }
+            ;;
     esac
 }
 
@@ -77,6 +81,7 @@ bindkey '\ek' 'maxdepth'
 #     # echo helper
 # }
 # zle -N zle-line-finish helper
+
 
 function append_widget() {
     widget="$1"
