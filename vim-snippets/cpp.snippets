@@ -1,3 +1,97 @@
+snippet toproto "To/FromProto" b
+void ToProto(${3:NProto::}${2:$1}* ${5:proto`!p
+if t[4]: snip.rv = t[4][0].upper() + t[4][1:]
+else: snip.rv = ""`}, const ${1:TName}& $4);
+void FromProto($1* $4, const $3$2& $5);
+$0
+endsnippet
+
+snippet cref "Wrap with const ref" i
+const ${VISUAL}&$0
+endsnippet
+
+snippet repa "Register parameter" b
+RegisterParameter("`!p
+res = ""
+for c in t[1]:
+	if c.isupper() and res:
+		res += '_'
+	res += c.lower()
+snip.rv = res
+`", $1)
+	.Default($2);$0
+endsnippet
+
+snippet respa "Register struct parameter" b
+registrar.Parameter("`!p
+res = ""
+for c in t[1]:
+	if c.isupper() and res:
+		res += '_'
+	res += c.lower()
+snip.rv = res
+`", &TThis::$1)
+	.Default($2);$0
+endsnippet
+
+snippet template_yt "YT file template" b
+`!p
+if fn.endswith(".cpp"):
+	snip.rv = ""
+else:
+	snip.rv = "#pragma once\n\n"`$0
+
+namespace $2 {
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+} // namespace $2
+endsnippet
+
+snippet boget "Bootstrap_->GetSmth()" b
+const auto& `!p
+res = t[1][3:].split("(")[0]
+if len(res) > 0:
+	res = res[0].lower() + res[1:]
+snip.rv = res
+` = Bootstrap_->$1
+endsnippet
+
+snippet class "Class" b
+class $1
+{
+public:
+	$0
+};
+endsnippet
+
+snippet classinh "Class" b
+class $1
+	: public $2
+{
+public:
+	$0
+};
+endsnippet
+
+snippet yson_struct "Class" b
+class $1
+	: public NYTree::TYsonStruct
+{
+public:
+	$0
+
+	REGISTER_YSON_STRUCT($1)
+
+	static void Register(TRegistrar registrar);
+};
+
+DEFINE_REFCOUNTED_TYPE($1)
+endsnippet
+
 snippet ACM_bitsetcount "Count in bitset range" b
 int count(int l, int r) {
 	int s = 0;
