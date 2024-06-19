@@ -49,9 +49,11 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'metakirby5/codi.vim'
 Plugin 'johngrib/vim-game-code-break'
+Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'lyuts/vim-rtags'
 Plugin 'majutsushi/tagbar'
+Plugin 'rickhowe/diffchar.vim'
 
 " Plugin 'lyokha/vim-xkbswitch'
 " Plugin 'artur-shaik/vim-javacomplete2'
@@ -61,21 +63,26 @@ Plugin 'majutsushi/tagbar'
 call vundle#end()
 filetype plugin indent on
 
-set rtp+=~/.fzf
+" set rtp+=~/.fzf
+" set rtp+=/usr/bin/fzf
 
 
 " ===============================  Variables  ========================TOC_02
 let $IFSMIRNOV=1
-let $CXXFLAGS = "-O2 -std=c++17 -Wall -Wextra -DLOCAL "
+let $CXXFLAGS = "-O2 -std=c++20 -Wall -Wextra -DLOCAL "
 let $CXXFLAGS .= "-Wno-char-subscripts -Wno-unused-result "
 let $CXXFLAGS .= "-Wno-misleading-indentation "
 let $CXXFLAGS .= "-I/home/ifsmirnov/olymp "
 let $CXXFLAGS .= "-pthread "
+let $CXXFLAGS .= "-fconcepts "
+
+let $CXXFLAGS .= "-Wno-unused-variable "
+let $CXXFLAGS .= "-Wno-unused-function "
 
 let $CFLAGS = "-O2 -std=c89 -pedantic -Wall -Werror -Wextra"
 
 let g:colemak = 1
-let g:python = 2
+let g:python = 3
 
 
 " ============================  Global settings  =====================TOC_03
@@ -117,7 +124,8 @@ set cinoptions+=N-sl1
 set incsearch
 set ignorecase
 set smartcase
-set conceallevel=1
+" set conceallevel=1
+set conceallevel=0
 set shortmess+=c
 set langremap
 set encoding=utf-8
@@ -138,11 +146,16 @@ endf
 
 
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+set viminfo='100,<50,s10,h,:100000
+set history=10000
 
 " ==========================  File-local settings  ===================TOC_04
 autocmd BufEnter *.html set shiftwidth=2
 autocmd BufEnter *.html set tabstop=2
 autocmd BufEnter *.html set softtabstop=2
+autocmd BufEnter *.yaml set shiftwidth=2
+autocmd BufEnter *.yaml set tabstop=2
+autocmd BufEnter *.yaml set softtabstop=2
 autocmd BufEnter Makefile set noet
 autocmd BufLeave Makefile set et
 
@@ -151,15 +164,18 @@ autocmd BufEnter *.json setlocal conceallevel=0
 au BufRead,BufNewFile *.in setfiletype text
 au BufRead,BufNewFile *.gradle setfiletype groovy
 au BufEnter,BufRead,BufNewFile *.md setfiletype markdown
+au BufEnter,BufRead,BufNewFile *.md unmap <buffer> ge
 
 
 " ============================  Plugin settings  =====================TOC_05
 let g:UltiSnipsExpandTrigger="<c-h>"
-let g:UltiSnipsJumpForwardTrigger="<c-k>"
-let g:UltiSnipsJumpBackwardTrigger="<c-b>"
+let g:UltiSnipsJumpForwardTrigger="<c-h>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetsDir="~/.vim/mysnippets"
 let g:UltiSnipsSnippetDirectories=["UltiSnips", "mysnippets"]
+let g:UltiSnipsRemoveSelectModeMappings = 1
+let g:UltiSnipsMappingsToIgnore = ["<BS>"]
 
 let g:NERDTreeMapOpenExpl = "j" " thnx Colemak
 au VimEnter NERD_tree_1 enew | execute 'NERDTree '.argv()[0]
@@ -168,7 +184,7 @@ let g:ctrlp_custom_ignore='/build/'
 
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
-let g:ycm_confirm_extra_conf = 0
+" let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_complete_in_comments = 0
@@ -176,12 +192,29 @@ let g:ycm_enable_diagnostic_signs = 0
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_goto_buffer_command = 'horizontal-split'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_auto_hover = ""
 " let g:ycm_auto_trigger = 0
+
+let g:ycm_clangd_uses_ycmd_caching = 0
+" let g:ycm_clangd_args = ["--header-insertion=never", "--clang-tidy", "--background-index=false", "-j=4"]
+let g:ycm_clangd_args = ["--header-insertion=never", "--clang-tidy", "-j=2"]
+
+" let g:ycm_language_server =
+"   \ [
+"   \   {
+"   \     'name': 'cpp',
+"   \     'filetypes': [ 'cpp' ],
+"   \     'port': 6008,
+"   \    }
+"   \ ]
 
 let g:NERDSpaceDelims = 1
 let g:NERDCommentEmptyLines = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTrimTrailingWhitespace = 1
+let g:NERDCustomDelimiters = { '': { 'left': '#','right': '' } }
+let g:NERDUsePlaceHolders = 0
+
 
 let g:searchindex_next_key = g:colemak ? 'l' : 'n'
 
@@ -207,8 +240,11 @@ let g:rtagsRcCmd = '/home/ifsmirnov/packages/rtags/bin/rc'
 
 let g:tagbar_width=70
 let g:tagbar_sort=0
+let g:tagbar_ctags_bin='/usr/bin/ctags-universal'
 
-autocmd FileType tagbar map <C-N> 5n
+let g:DiffUnit="Word1"
+
+autocmd FileType tagbar nnoremap <C-N> 5j
 
 " ================================  Colors  ==========================TOC_06
 set t_Co=256
@@ -248,9 +284,14 @@ map gu <plug>NERDCommenterUncomment
 
 map gd :YcmCompleter GoToImprecise<Enter>
 map gD :YcmCompleter GetTypeImprecise<Enter>
-map ,f :YcmCompleter FixIt<Enter>:cclose<Enter>
+" map gd :YcmCompleter GoTo<Enter>
+" map gD :YcmCompleter GetType<Enter>
+map <leader>f :YcmCompleter FixIt<Enter>:cclose<Enter>
 
 autocmd FileType python map <buffer> gd :YcmCompleter GoTo<Enter>
+autocmd FileType python map <buffer> gD :YcmCompleter GetType<Enter>
+autocmd FileType go map <buffer> gd :YcmCompleter GoTo<Enter>
+autocmd FileType go map <buffer> gD :YcmCompleter GetType<Enter>
 
 " Fold the function body staying in its first line
 map gz HV/{<Enter>%zf:let @/=""<Enter>
@@ -315,6 +356,18 @@ map <Leader>m :BL<Enter>
 
 map <leader>tb :TagbarToggle<Enter>
 
+" Insert empty line above.
+noremap go O<Esc>j$
+
+" Like <C-R>=, but calls shell builtin calculator.
+imap <C-E> <C-R>=system('echo -n $(())')<Left><Left><Left><Left>
+
+nmap gf <Plug>(YCMFindSymbolInDocument)
+nmap gF <Plug>(YCMFindSymbolInWorkspace)
+nmap gr :YcmCompleter GoToReferences<Enter>
+nmap <leader>h <plug>(YCMHover)
+
+
 " =========================  Compile/Run functions  ==================TOC_08
 func! Compile()
     write
@@ -325,7 +378,11 @@ func! Compile()
             echom "Success"
             let $CXXFLAGS .= "-DJNGEN_DECLARE_ONLY "
             let $CXXFLAGS .= "/home/ifsmirnov/olymp/jngen/lib.o "
+            let $CXXFLAGS .= "-I/home/ifsmirnov/olymp/jngen "
         endif
+        " let CFLAGS = -O2 -Wall -Wextra
+        " cc -O2 -std=c89 -pedantic -Wall -Werror -Wextra    attack.c   -o attack
+
 
         silent !echo
         silent !echo -e "\033[31;1m* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\033[0;m"
@@ -364,7 +421,7 @@ func! Run()
         !bash %
     elseif &filetype == "java"
         !java %<
-    elseif &filetype == "text"
+    elseif &filetype == "text" || &filetype == "yaml"
         write
         wincmd w
         call Run()
@@ -570,3 +627,15 @@ let g:rainbow_conf = {
     \        'css': 0,
     \    }
     \}
+
+func! CopyToClipboard(message)
+    execute "silent !echo " . a:message . " |xclip -i -sel clip"
+    redraw!
+endf
+
+func! OpenInChrome(link)
+    execute "silent !chromium " . a:link . ">/dev/null"
+    redraw!
+endf
+
+vnoremap <Leader>c :<C-u>silent '<,'>w !cl i \|redraw\!<Enter>gv
