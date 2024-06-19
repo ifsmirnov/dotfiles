@@ -54,9 +54,9 @@ setopt inc_append_history
 disable r
 
 # Compilation shortcuts
-alias gd="g++ -std=c++17 -ggdb -DLOCAL";
-alias gp="g++ -std=c++17 -pg -DLOCAL";
-alias g="g++ -O2 -std=c++17 -Wall -Wextra -DLOCAL -Wno-char-subscripts -Wno-unused-result -I/home/ifsmirnov/olymp"
+alias gd="g++ -std=c++20 -ggdb -DLOCAL";
+alias gp="g++ -std=c++20 -pg -DLOCAL";
+alias g="g++ -O2 -std=c++20 -Wall -Wextra -DLOCAL -Wno-char-subscripts -Wno-unused-result -I/home/ifsmirnov/olymp"
 
 alias pc=polygon-cli
 
