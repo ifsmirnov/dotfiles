@@ -116,6 +116,10 @@ function sargs { xargs -L1 sh -c "$@" _; }
 #     export FZF_CTRL_T_COMMAND='fd --type f'
 # fi
 
+[ -f ~/dotfiles/contrib/fzf-zsh-completion/fzf-zsh-completion.sh ] &&
+    source ~/dotfiles/contrib/fzf-zsh-completion/fzf-zsh-completion.sh
+bindkey ^H fzf_completion
+
 # Locales
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US
