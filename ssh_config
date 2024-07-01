@@ -8,4 +8,6 @@ ForwardX11 yes
 ForwardX11Trusted yes
 StrictHostKeyChecking no
 
+HashKnownHosts no
+
 Include config.d/*
