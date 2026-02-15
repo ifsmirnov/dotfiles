@@ -1,0 +1,1 @@
+ls /tmp/core* -cltr | tail -1 | awk '{print $9}'

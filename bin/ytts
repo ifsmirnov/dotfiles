@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ts=$(echo $1 | grep -o '[0-9]*')
+echo $ts
+date --date=@$((ts >> 30))
