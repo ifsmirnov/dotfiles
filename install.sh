@@ -31,7 +31,7 @@ version_is_at_least() {
 }
 
 DOTFILES="ackrc inputrc vimrc gitconfig lesskey zshrc tmux.conf"
-PACKAGES="vim tmux zsh fzf fd-find git command-not-found gconf2 tree"
+PACKAGES="vim tmux zsh fzf fd-find git command-not-found tree"
 DIR=`pwd`
 
 ##################################################################

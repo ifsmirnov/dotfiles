@@ -35,7 +35,14 @@ fpath=($fpath /usr/share/zsh/vendor-functions /usr/share/zsh/vendor-completions)
 fpath=($fpath $(find /usr/share/zsh/functions -mindepth 1 -type d -print0 | tr '\0' ' '))
 fpath+=~/.zfunc
 
-autoload -U compinit && compinit
+fpath=(${fpath:#*/Completion/Solaris})
+fpath=(${fpath:#*/Completion/AIX})
+fpath=(${fpath:#*/Completion/Cygwin})
+fpath=(${fpath:#*/Completion/openSUSE})
+fpath=(${fpath:#*/Completion/Redhat})
+fpath=(${fpath:#*/Completion/Mandriva})
+
+autoload -Uz compinit && compinit -C
 
 # User config
 export DEBFULLNAME="Ivan Smirnov"
