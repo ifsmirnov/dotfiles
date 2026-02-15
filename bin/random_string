@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from random import choice
 
 #  alph = 'qwertyuiopasdfghjklzxcvbnm'
 alph = '0123456789abcdef'
 
-print ''.join(choice(alph) for i in range(8))
+print(''.join(choice(alph) for i in range(8)))

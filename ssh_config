@@ -1,9 +1,12 @@
-Host *
-ControlMaster auto
-ControlPath ~/.ssh/sockets/%r@%h-%p
-ControlPersist 30
+# Host *
+# ControlMaster auto
+# ControlPath ~/.ssh/sockets/%r@%h-%p
+# ControlPersist 30
 
-ForwardAgent yes
+# ForwardAgent yes
+ForwardAgent %d/.skotty/sock/default.sock
+
+# ForwardAgent /home/ifsmirnov/.skotty/sock/default.sock
 ForwardX11 yes
 ForwardX11Trusted yes
 StrictHostKeyChecking no

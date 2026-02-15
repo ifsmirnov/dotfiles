@@ -1,1 +1,2 @@
 # HOST_SHORTNAME="foo"
+LOCALHOST="true"

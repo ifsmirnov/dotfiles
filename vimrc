@@ -79,7 +79,7 @@ let $CXXFLAGS .= "-fconcepts "
 let $CXXFLAGS .= "-Wno-unused-variable "
 let $CXXFLAGS .= "-Wno-unused-function "
 
-let $CFLAGS = "-O2 -std=c89 -pedantic -Wall -Werror -Wextra"
+let $CFLAGS = "-O2 -Wall -Werror -Wextra"
 
 let g:colemak = 1
 let g:python = 3
@@ -120,7 +120,7 @@ set listchars=tab:>-
 " <C-A> works on 07
 set nrformats-=octal
 " no new tab after namespace
-set cinoptions+=N-sl1
+set cinoptions+=N-s,l1,g0,is,(s
 set incsearch
 set ignorecase
 set smartcase
@@ -148,6 +148,7 @@ endf
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set viminfo='100,<50,s10,h,:100000
 set history=10000
+set termwinkey=<C-X>
 
 " ==========================  File-local settings  ===================TOC_04
 autocmd BufEnter *.html set shiftwidth=2
@@ -165,7 +166,9 @@ au BufRead,BufNewFile *.in setfiletype text
 au BufRead,BufNewFile *.gradle setfiletype groovy
 au BufEnter,BufRead,BufNewFile *.md setfiletype markdown
 au BufEnter,BufRead,BufNewFile *.md unmap <buffer> ge
-
+au FileType qf nnoremap <buffer> o <Enter><C-W><C-W>
+au FileType qf nnoremap <buffer> O <C-W><Enter><C-W>T:copen<Enter>
+au FileType qf nnoremap <buffer> <C-W>t :ccl<Enter>:tabe<Enter>:copen<Enter>
 
 " ============================  Plugin settings  =====================TOC_05
 let g:UltiSnipsExpandTrigger="<c-h>"
@@ -193,11 +196,15 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_goto_buffer_command = 'horizontal-split'
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_auto_hover = ""
-" let g:ycm_auto_trigger = 0
+let g:ycm_auto_trigger = 1
+let g:ycm_extra_conf_globlist = ['!~/arc/arcadia/*', '!~/dvarc/arcadia/*', '/*']
 
 let g:ycm_clangd_uses_ycmd_caching = 0
-" let g:ycm_clangd_args = ["--header-insertion=never", "--clang-tidy", "--background-index=false", "-j=4"]
-let g:ycm_clangd_args = ["--header-insertion=never", "--clang-tidy", "-j=2"]
+" let g:ycm_clangd_args = ["--header-insertion=never", "--clang-tidy", "--background-index=false", "-j=1"]
+" let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100", "-resource-dir=/home/ifsmirnov/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/clang/lib/clang/19.1.0"]
+let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100"]
+" let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100", "-resource-dir=/home/ifsmirnov/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/clang/lib/clang/19.1.0", "--background-index=false"]
+let g:ycm_clangd_binary_path = "/home/ifsmirnov/bin/clangd_cgroup"
 
 " let g:ycm_language_server =
 "   \ [
@@ -212,8 +219,21 @@ let g:NERDSpaceDelims = 1
 let g:NERDCommentEmptyLines = 1
 let g:NERDDefaultAlign = 'left'
 let g:NERDTrimTrailingWhitespace = 1
-let g:NERDCustomDelimiters = { '': { 'left': '#','right': '' } }
+let g:NERDCustomDelimiters = {
+    \'': {
+        \'left': '#',
+        \'right': ''
+    \},
+    \'cpp': {
+        \'left': '//',
+        \'right': '',
+        \'leftAlt': '',
+        \'rightAlt': ''
+    \}
+\}
 let g:NERDUsePlaceHolders = 0
+let g:NERDRemoveAltComs = 0
+let g:NERDAllowAnyVisualDelims = 0
 
 
 let g:searchindex_next_key = g:colemak ? 'l' : 'n'
@@ -225,7 +245,7 @@ let g:vim_markdown_math = 1
 
 " let g:XkbSwitchEnabled = 1
 " let g:XkbSwitchLib = '/usr/local/lib/libxkbswitch.so'
-" let g:XkbSwitchIMappings = ['ru']
+" let g:XkbSwitchIMappings = []
 
 " autocmd FileType java setlocal omnifunc=javacomplete#Complete
 
@@ -244,7 +264,6 @@ let g:tagbar_ctags_bin='/usr/bin/ctags-universal'
 
 let g:DiffUnit="Word1"
 
-autocmd FileType tagbar nnoremap <C-N> 5j
 
 " ================================  Colors  ==========================TOC_06
 set t_Co=256
@@ -301,7 +320,10 @@ nnoremap gP `[V`]
 iab uns using namespace std
 
 map s :s/
+" Wrap with parens
 map gb <C-^>
+" Grep token under cursor
+nnoremap gs "zyiw:tabe<Enter>:lgrep <C-R>z<Enter><Enter>:lopen<Enter>:let @/=@z<Enter>:set hlsearch<Enter>
 
 map <Leader>r :source ~/.vimrc<Enter>
 map <Leader>n :NERDTreeToggle<Enter>
@@ -314,7 +336,7 @@ map <C-T> :tabe<Enter>
 imap {<CR> {<CR>}<Esc>O
 
 map ; :
-nnoremap q; q:i
+nnoremap q; q:
 
 " todo: escape control keys in two next mappings
 
@@ -366,6 +388,10 @@ nmap gf <Plug>(YCMFindSymbolInDocument)
 nmap gF <Plug>(YCMFindSymbolInWorkspace)
 nmap gr :YcmCompleter GoToReferences<Enter>
 nmap <leader>h <plug>(YCMHover)
+
+" Surround current word with parentheses and start inserting function name before it
+nnoremap gb viw<Esc>a)<Esc>hbi(<Esc>i
+
 
 
 " =========================  Compile/Run functions  ==================TOC_08
@@ -489,7 +515,9 @@ if g:colemak
     noremap n j
     noremap e k
     noremap i zvl
-    onoremap i l
+    " onoremap i l
+    " Switched onoremap to noremap to test <C-o>i in insert mode.
+    noremap i l
     noremap l n
     noremap k i
     noremap j e
@@ -628,8 +656,21 @@ let g:rainbow_conf = {
     \    }
     \}
 
+func! GetArcanumLink(mode)
+    let l:root = system("cd " . expand("%:h") . " && arc root 2>/dev/null")
+    let l:rev = system("cd " . expand("%:h") . " && arc dump object $(arc merge-base HEAD trunk) --json | jq .revision -j")
+    let l:link = "https://a.yandex-team.ru/arcadia/" . expand("%:p")[len(l:root):] . "?rev=r" . l:rev
+    if a:mode == "normal"
+        return l:link . "\\#L" . getcurpos()[1]
+    else
+        let l:start = getpos("'<")
+        let l:finish = getpos("'>")
+        return l:link . "\\#L" . l:start[1] . "-" . l:finish[1]
+    endif
+endf
+
 func! CopyToClipboard(message)
-    execute "silent !echo " . a:message . " |xclip -i -sel clip"
+    execute "silent !echo '" . a:message . "' |xclip -i -sel clip"
     redraw!
 endf
 
@@ -638,4 +679,29 @@ func! OpenInChrome(link)
     redraw!
 endf
 
+func! MakeDiffFunc(...)
+    let l:rev = a:0 > 0 ? a:1 : "HEAD"
+    let l:root = system("arc root")
+    let l:relpath=expand("%:p")[len(l:root):]
+    vnew | execute "%!arc show " . l:rev . ":" . l:relpath
+    setf cpp
+    set ro
+    set buftype=nofile
+    execute "file " . l:rev . ":" . l:relpath
+    windo diffthis
+    winc w
+    redraw!
+endf
+
+command -nargs=? MakeDiff call MakeDiffFunc(<f-args>)
+
+" nnoremap <Leader>a :call OpenInChrome(GetArcanumLink("normal"))<Enter>
+" vnoremap <Leader>a :<C-u>call OpenInChrome(GetArcanumLink("visual"))<Enter>gv
+nnoremap <Leader>A :call CopyToClipboard(GetArcanumLink("normal"))<Enter>
+vnoremap <Leader>A :<C-u>call CopyToClipboard(GetArcanumLink("visual"))<Enter>gv
+
 vnoremap <Leader>c :<C-u>silent '<,'>w !cl i \|redraw\!<Enter>gv
+
+func! Follow()
+    while 1 | e | exec("normal Gzz") | redraw | sleep 1 | endwhile
+endf

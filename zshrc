@@ -1,4 +1,5 @@
 # Path to oh-my-zsh installation.
+DISABLE_MAGIC_FUNCTIONS=true
 export ZSH=/home/ifsmirnov/.oh-my-zsh
 
 ZSH_THEME="robbyrussell"
@@ -71,6 +72,10 @@ alias gi=git # frequent typo
 alias tmux='tmux -2'
 alias vim='TERM=xterm vim'
 
+grp() {
+    grep "$1" | sort | uniq -c
+}
+
 # Show 10 largest directories
 alias dul="du -ahd 1 | sort -rh | head"
 
@@ -137,12 +142,12 @@ export LC_MEASUREMENT=en_GB.UTF-8
 export LC_IDENTIFICATION=en_GB.UTF-8
 export LC_ALL=
 
+# May define HOST_SHORTNAME to be appended to prompt.
+[ -e ~/dotfiles/local.zsh ] && . ~/dotfiles/local.zsh
 # Load extra sources
 . ~/dotfiles/bindings.zsh
 . ~/dotfiles/stopwatch.zsh
 [ -e ~/dotfiles/yandex.zsh ] && . ~/dotfiles/yandex.zsh
-# May define HOST_SHORTNAME to be appended to prompt.
-[ -e ~/dotfiles/local.zsh ] && . ~/dotfiles/local.zsh
 
 # Apply local stuff.
 if [ -n "$HOST_SHORTNAME" ]; then

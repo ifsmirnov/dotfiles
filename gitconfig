@@ -30,3 +30,5 @@
     showPatch = true
 [init]
     defaultBranch = master
+[http]
+	sslVerify = true
