@@ -98,7 +98,6 @@ set showcmd
 set whichwrap+=h,l
 set matchpairs+=<:>
 set mouse=a
-set ttymouse=xterm2
 " set term=xterm
 set complete-=i
 set hlsearch
