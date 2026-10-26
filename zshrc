@@ -5,6 +5,7 @@ export ZSH=/home/ifsmirnov/.oh-my-zsh
 ZSH_THEME="robbyrussell"
 CASE_SENSITIVE="true"
 ENABLE_CORRECTION="true"
+unsetopt CORRECT_ALL
 # COMPLETION_WAITING_DOTS="true"
 plugins=(git pip sudo ubuntu)
 # plugins+=("zsh-syntax-highlighting")
@@ -26,23 +27,23 @@ else
     plugins+=("command-not-found")
 fi
 
-source $ZSH/oh-my-zsh.sh
-
 export HISTSIZE=100000000
 export SAVEHIST=100000000
 
 fpath=($fpath /usr/share/zsh/vendor-functions /usr/share/zsh/vendor-completions)
-fpath=($fpath $(find /usr/share/zsh/functions -mindepth 1 -type d -print0 | tr '\0' ' '))
+# fpath=($fpath $(find /usr/share/zsh/functions -mindepth 1 -type d -print0 | tr '\0' ' '))
 fpath+=~/.zfunc
 
-fpath=(${fpath:#*/Completion/Solaris})
-fpath=(${fpath:#*/Completion/AIX})
-fpath=(${fpath:#*/Completion/Cygwin})
-fpath=(${fpath:#*/Completion/openSUSE})
-fpath=(${fpath:#*/Completion/Redhat})
-fpath=(${fpath:#*/Completion/Mandriva})
+# fpath=(${fpath:#*/Completion/Solaris})
+# fpath=(${fpath:#*/Completion/AIX})
+# fpath=(${fpath:#*/Completion/Cygwin})
+# fpath=(${fpath:#*/Completion/openSUSE})
+# fpath=(${fpath:#*/Completion/Redhat})
+# fpath=(${fpath:#*/Completion/Mandriva})
 
-autoload -Uz compinit && compinit -C
+source $ZSH/oh-my-zsh.sh
+
+compdef -d kill
 
 # User config
 export DEBFULLNAME="Ivan Smirnov"
@@ -96,7 +97,12 @@ bindkey '\ep' up-line-or-beginning-search
 autoload -U zmv
 alias mmv='noglob zmv -W'
 
+alias codex="FORCE_COLOR=1 codex"
+
 alias a=arc
+compdef a=arc
+# Trigger completion to avoid lazy load.
+# _arc
 
 # Colorful messaging
 function red    { echo -e "\033[31;1m$@\033[0;m" ; }
@@ -116,11 +122,13 @@ function sargs { xargs -L1 sh -c "$@" _; }
 
 # fzf and fd
 # local installation?
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
+# export FZF_COMPLETION_TRIGGER=""
 
 # package installation?
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
-[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+# [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+# [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
 
 # if which fd >/dev/null; then
 #     export FZF_DEFAULT_COMMAND='fd --type f'
@@ -154,12 +162,17 @@ export LC_ALL=
 # Load extra sources
 . ~/dotfiles/bindings.zsh
 . ~/dotfiles/stopwatch.zsh
+. ~/dotfiles/history_tags.zsh
 [ -e ~/dotfiles/yandex.zsh ] && . ~/dotfiles/yandex.zsh
 
 # Apply local stuff.
 if [ -n "$HOST_SHORTNAME" ]; then
     PROMPT='%{$fg_bold[green]%}$HOST_SHORTNAME%{$reset_color%} '$PROMPT
 fi
+
+# Short random tag, regenerated before every prompt (see history_tags.zsh),
+# so a specific command can later be found with `rh <tag>`.
+PROMPT='%{$fg[cyan]%}[$PS_TAG]%{$reset_color%} '$PROMPT
 
 echo $PATH | tr ':' '\n' | grep -q "^$HOME/bin$" ||
     export PATH="$HOME/bin":$PATH

@@ -146,6 +146,33 @@ vim_stuff() {
     fi
 }
 
+xkb_stuff() {
+    if ! command -v gsettings >/dev/null; then
+        return
+    fi
+
+    green Setting up custom XKB symbols override for keycode 66 autorepeat
+    mkdir -p ~/.config/xkb/symbols
+    ln -sf $DIR/xkb/symbols/custom-repeat ~/.config/xkb/symbols/custom-repeat
+    Green "    xkb/symbols/custom-repeat"
+
+    opt="custom-repeat(caps_backspace_repeat)"
+    current=$(gsettings get org.gnome.desktop.input-sources xkb-options)
+    if echo "$current" | grep -q "$opt"; then
+        green "    xkb-options already includes the fix"
+    else
+        new=$(python3 -c "
+import ast
+raw = '''$current'''
+val = [] if raw.strip() == '@as []' else ast.literal_eval(raw)
+val.append('$opt')
+print(repr(val))
+")
+        gsettings set org.gnome.desktop.input-sources xkb-options "$new"
+        Green "    added '$opt' to xkb-options"
+    fi
+}
+
 run_lesskey() {
     if version_is_at_least 582 \
         "less --version | grep -Po '(?<=^less )[0-9.]*'"
@@ -220,6 +247,7 @@ regular_symlinks
 bin_symlinks
 ssh_config
 vim_stuff
+# xkb_stuff
 run_lesskey
 
 if [ "$install_tmux" == 1 ]; then

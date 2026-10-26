@@ -6,6 +6,15 @@ function _default_branch() {
     git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's:origin/::'
 }
 
+function _recent_dirs_fzf() {
+    # Start from the third entry from the bottom: current dir is not useful,
+    # previous can be reached with -.
+    dir=$(dirs | tr ' ' '\n' | fzf --sync --bind start:up+up)
+    [ -n "$dir" ] && cd ${~dir}
+    zle reset-prompt
+    # zle redisplay
+}
+
 # Most of this is experimental garbage, but still.
 function run() {
     read -sk1 c
@@ -27,6 +36,7 @@ function run() {
         # merge-base between current branch and master
         b) LBUFFER+=$(git merge-base `_current_branch` `_default_branch` | head -c8) ;;
         u) LBUFFER+='ifsmirnov' ;;
+        h) _recent_dirs_fzf ;;
         *)
             which _eval_yandex_esc_l_binding >/dev/null && {
                 _eval_yandex_esc_l_binding $c

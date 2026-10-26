@@ -3,3 +3,15 @@ fzf: sudo apt-get install fzf; see /usr/share/doc/fzf/README.Debian for how to i
 fd: sudo apt-get install fd-find; ln -s $(which fdfind) ~/bin/fd
 
 rg: sudo apt-get install ripgrep
+
+colemak backspace repeat (keycode 66): stock Colemak remaps <CAPS> to
+BackSpace but leaves it non-repeating, and any live xset patch (~/.xprofile,
+autostart script) gets wiped whenever mutter/gsd recompiles the keymap
+(login, resume from sleep, keyboard hotplug). Real fix: bake repeat=Yes into
+the keymap itself via a local XKB override, no root needed. Symbols file at
+~/dotfiles/xkb/symbols/custom-repeat, symlinked to
+~/.config/xkb/symbols/custom-repeat by install.sh's xkb_stuff(), and enabled
+via `gsettings ... xkb-options` including
+'custom-repeat(caps_backspace_repeat)'. Survives resume/login because it's
+part of what gets recompiled, not a patch applied after the fact. Rerun
+`~/dotfiles/install.sh` to (re)apply on a new machine.

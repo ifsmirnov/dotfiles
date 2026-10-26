@@ -201,7 +201,13 @@ let g:ycm_extra_conf_globlist = ['!~/arc/arcadia/*', '!~/dvarc/arcadia/*', '/*']
 let g:ycm_clangd_uses_ycmd_caching = 0
 " let g:ycm_clangd_args = ["--header-insertion=never", "--clang-tidy", "--background-index=false", "-j=1"]
 " let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100", "-resource-dir=/home/ifsmirnov/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/clang/lib/clang/19.1.0"]
-let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100"]
+
+if 1
+    let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100"]
+else
+    let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100", "--background-index=false"]
+endif
+
 " let g:ycm_clangd_args = ["--header-insertion=never", "-j=2", "--limit-results=100", "-resource-dir=/home/ifsmirnov/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/clang/lib/clang/19.1.0", "--background-index=false"]
 let g:ycm_clangd_binary_path = "/home/ifsmirnov/bin/clangd_cgroup"
 
@@ -657,7 +663,7 @@ let g:rainbow_conf = {
 
 func! GetArcanumLink(mode)
     let l:root = system("cd " . expand("%:h") . " && arc root 2>/dev/null")
-    let l:rev = system("cd " . expand("%:h") . " && arc dump object $(arc merge-base HEAD trunk) --json | jq .revision -j")
+    let l:rev = system("cd " . expand("%:h") . " && arc dump object 2>/dev/null $(arc merge-base HEAD trunk 2>/dev/null) --json | jq .revision -j")
     let l:link = "https://a.yandex-team.ru/arcadia/" . expand("%:p")[len(l:root):] . "?rev=r" . l:rev
     if a:mode == "normal"
         return l:link . "\\#L" . getcurpos()[1]
@@ -669,7 +675,7 @@ func! GetArcanumLink(mode)
 endf
 
 func! CopyToClipboard(message)
-    execute "silent !echo '" . a:message . "' |xclip -i -sel clip"
+    execute "silent !echo -n '" . a:message . "' |xclip -i -sel clip"
     redraw!
 endf
 
@@ -704,3 +710,5 @@ vnoremap <Leader>c :<C-u>silent '<,'>w !cl i \|redraw\!<Enter>gv
 func! Follow()
     while 1 | e | exec("normal Gzz") | redraw | sleep 1 | endwhile
 endf
+
+nnoremap <C-p> :Files<CR>
